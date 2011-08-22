@@ -7,4 +7,6 @@ To make a KML file, run
 
     python export.py
 
+Here's one I prepared earlier: http://markhansen.co.nz/e.kml
+
 More to come.
