@@ -2,6 +2,7 @@
 -- them on a map.
 select 
 receiveconfiguration.licenceid, 
+clientname.name,
 rxgeoref.easting,
 rxgeoref.northing,
 rxlocation.locationheight,
@@ -31,6 +32,12 @@ on rxlocation.locationid = rxgeoref.locationid
 
 JOIN geographicreference as txgeoref 
 on txlocation.locationid = txgeoref.locationid
+
+JOIN licence
+on receiveconfiguration.licenceid = licence.licenceid
+
+JOIN clientname
+on licence.clientid = clientname.clientid
 
 where rxgeoref.georeferencetypeid = 3 -- use the WGS84 datum for Google Maps
 and txgeoref.georeferencetypeid = 3 -- use the WGS84 datum for Google Maps

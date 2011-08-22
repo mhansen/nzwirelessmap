@@ -21,28 +21,32 @@ print """<?xml version="1.0" encoding="UTF-8"?>
     <Style id="yellowLineGreenPoly">
       <LineStyle>
         <color>7f00ffff</color>
-        <width>4</width>
+        <width>1</width>
       </LineStyle>
-      <PolyStyle>
-        <color>7f00ff00</color>
-      </PolyStyle>
     </Style>"""
 
-for licenceid, rxlng, rxlat, rxalt, txlng, txlat, txalt, rxname, txname in c:
+for licenceid, clientname, rxlng, rxlat, rxalt, txlng, txlat, txalt, rxname, txname in c:
+    if float(rxlat) == 0:
+        rxalt = 35785000 # altitude of geosync satellites
+    if float(txlat) == 0:
+        txalt = 35785000 # altitude of geosync satellites
+    clientname = escape(clientname).strip()
+    rxname = escape(rxname).replace("\x12","").strip()
+    txname = escape(txname).replace("\x12","").strip()
+
     print """
     <Placemark>
-      <name>Licence ID %s</name>
-      <description>rx: %s, tx: %s</description>
+      <name>%s<br/>Licence ID %s</name>
+      <description>rx: %s<br/>tx: %s</description>
       <styleUrl>#yellowLineGreenPoly</styleUrl>
       <LineString>
-        <extrude>1</extrude>
-        <altitudeMode>absolute</altitudeMode>
-        <coordinates>
-            %s,%s,%s
-            %s,%s,%s
-        </coordinates>
+        <extrude>0</extrude>
+        <tessellate>0</tessellate>
+        <altitudeMode>clampToGround</altitudeMode>
+        <coordinates>%s,%s,%s
+%s,%s,%s</coordinates>
       </LineString>
-    </Placemark>""" % (licenceid, escape(rxname).replace("\x12",""), escape(txname).replace("\x12",""), rxlng, rxlat, rxalt, txlng, txlat, txalt)
+    </Placemark>""" % (clientname, licenceid, rxname, txname, rxlng, rxlat, rxalt, txlng, txlat, txalt)
 
 print """
   </Document>
