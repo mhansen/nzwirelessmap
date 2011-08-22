@@ -4,8 +4,10 @@ select
 receiveconfiguration.licenceid, 
 rxgeoref.easting,
 rxgeoref.northing,
+rxlocation.locationheight,
 txgeoref.easting,
 txgeoref.northing,
+txlocation.locationheight,
 rxlocation.locationname,
 txlocation.locationname
 
