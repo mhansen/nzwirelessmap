@@ -46,4 +46,7 @@ and txgeoref.georeferencetypeid = 3 -- use the WGS84 datum for Google Maps
 
 and txlocation.locationtypeid != 9 -- filter out 'receive protection area' links that 
 and rxlocation.locationtypeid != 9 -- aren't actually point-to-point links
+
+and txgeoref.northing != 0
+and rxgeoref.northing != 0
 ;
