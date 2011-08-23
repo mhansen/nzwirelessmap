@@ -18,9 +18,9 @@ print """<?xml version="1.0" encoding="UTF-8"?>
     <description>Examples of paths. Note that the tessellate tag is by default
       set to 0. If you want to create tessellated lines, they must be authored
       (or edited) directly in KML.</description>
-    <Style id="yellowLineGreenPoly">
+    <Style id="p2plink">
       <LineStyle>
-        <color>7f00ffff</color>
+        <color>7f00ff00</color>
         <width>1</width>
       </LineStyle>
     </Style>"""
@@ -38,7 +38,7 @@ for licenceid, clientname, rxlng, rxlat, rxalt, txlng, txlat, txalt, rxname, txn
     <Placemark>
       <name>%s<br/>Licence ID %s</name>
       <description>rx: %s<br/>tx: %s</description>
-      <styleUrl>#yellowLineGreenPoly</styleUrl>
+      <styleUrl>#p2plink</styleUrl>
       <LineString>
         <extrude>0</extrude>
         <tessellate>0</tessellate>
