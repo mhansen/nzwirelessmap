@@ -11,8 +11,19 @@ txgeoref.easting,
 txgeoref.northing,
 txlocation.locationheight,
 rxlocation.locationname,
-txlocation.locationname
+txlocation.locationname,
 
+receiveconfiguration.rxantennamake,
+receiveconfiguration.rxantennatype,
+receiveconfiguration.rxantennaheight,
+receiveconfiguration.rxazimuth,
+receiveconfiguration.rxequipment,
+
+transmitconfiguration.txantennamake,
+transmitconfiguration.txantennatype,
+transmitconfiguration.txantennaheight,
+transmitconfiguration.txazimuth,
+transmitconfiguration.txequipment
 
 from receiveconfiguration 
 

@@ -28,7 +28,7 @@ print """<?xml version="1.0" encoding="UTF-8"?>
 def xmlize(s):
     return escape(s).replace("\x12","").strip()
 
-for licenceid, clientname, licencetype, rxlng, rxlat, rxalt, txlng, txlat, txalt, rxname, txname in c:
+for licenceid, clientname, licencetype, rxlng, rxlat, rxalt, txlng, txlat, txalt, rxname, txname, ra,rb,rc,rd,re,ta,tb,tc,td,te in c:
     if float(rxlat) == 0:
         rxalt = 35785000 # altitude of geosync satellites
     if float(txlat) == 0:
