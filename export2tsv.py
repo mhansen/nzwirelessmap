@@ -10,7 +10,7 @@ c = conn.cursor()
 sql = open("getpairs.sql").read()
 c.execute(sql)
 
-print "Name\tLicence Type\tLicence ID\tReceiver\tTransmitter\tgeometry\t" + "rxantennamake\trxantennatype\trxantennaheight\trxazimuth\trxequipment\t" + "txantennamake\ttxantennatype\ttxantennaheight\ttxazimuth\ttxequipment\t" + "rxheight\ttxheight"
+print "geometry\tName\tLicence Type\tLicence ID\tReceiver\tTransmitter\t" + "rxantennamake\trxantennatype\trxantennaheight\trxazimuth\trxequipment\t" + "txantennamake\ttxantennatype\ttxantennaheight\ttxazimuth\ttxequipment\t" + "rxheight\ttxheight"
 
 def tsvize(s):
     return s.replace("\t","").replace("\n","").strip()
@@ -22,4 +22,4 @@ for licenceid, clientname, licencetype, rxlng, rxlat, rxheight, txlng, txlat, tx
     txname = tsvize(txname)
     licencetype = tsvize(licencetype)
     geometry = """<LineString><coordinates>%s,%s,%s %s,%s,%s</coordinates></LineString>""" % (rxlng, rxlat, rxheight, txlng, txlat, txheight)
-    print (("%s\t"*17)+"%s") % (clientname, licencetype, licenceid, rxname, txname, geometry, rxantennamake, rxantennatype, rxantennaheight, rxazimuth, rxequipment, txantennamake, txantennatype, txantennaheight, txazimuth, txequipment, rxheight, txheight)
+    print (("%s\t"*17)+"%s") % (geometry, clientname, licencetype, licenceid, rxname, txname, rxantennamake, rxantennatype, rxantennaheight, rxazimuth, rxequipment, txantennamake, txantennatype, txantennaheight, txazimuth, txequipment, rxheight, txheight)
