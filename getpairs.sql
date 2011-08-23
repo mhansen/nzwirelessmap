@@ -3,6 +3,7 @@
 select 
 receiveconfiguration.licenceid, 
 clientname.name,
+licence.licencetype,
 rxgeoref.easting,
 rxgeoref.northing,
 rxlocation.locationheight,
@@ -11,6 +12,7 @@ txgeoref.northing,
 txlocation.locationheight,
 rxlocation.locationname,
 txlocation.locationname
+
 
 from receiveconfiguration 
 

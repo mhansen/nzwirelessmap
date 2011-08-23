@@ -25,19 +25,23 @@ print """<?xml version="1.0" encoding="UTF-8"?>
       </LineStyle>
     </Style>"""
 
-for licenceid, clientname, rxlng, rxlat, rxalt, txlng, txlat, txalt, rxname, txname in c:
+def xmlize(s):
+    return escape(s).replace("\x12","").strip()
+
+for licenceid, clientname, licencetype, rxlng, rxlat, rxalt, txlng, txlat, txalt, rxname, txname in c:
     if float(rxlat) == 0:
         rxalt = 35785000 # altitude of geosync satellites
     if float(txlat) == 0:
         txalt = 35785000 # altitude of geosync satellites
     clientname = escape(clientname).strip()
-    rxname = escape(rxname).replace("\x12","").strip()
-    txname = escape(txname).replace("\x12","").strip()
+    rxname = xmlize(rxname)
+    txname = xmlize(txname)
+    licencetype = xmlize(licencetype)
 
     print """
     <Placemark>
-      <name>%s<br/>Licence ID %s</name>
-      <description>rx: %s<br/>tx: %s</description>
+      <name>%s<br/>%s</name>
+      <description>Licence ID: %s<br/>Receiver: %s<br/>Transmitter: %s</description>
       <styleUrl>#p2plink</styleUrl>
       <LineString>
         <extrude>0</extrude>
@@ -46,7 +50,7 @@ for licenceid, clientname, rxlng, rxlat, rxalt, txlng, txlat, txalt, rxname, txn
         <coordinates>%s,%s,%s
 %s,%s,%s</coordinates>
       </LineString>
-    </Placemark>""" % (clientname, licenceid, rxname, txname, rxlng, rxlat, rxalt, txlng, txlat, txalt)
+    </Placemark>""" % (clientname, licencetype, licenceid, rxname, txname, rxlng, rxlat, rxalt, txlng, txlat, txalt)
 
 print """
   </Document>
