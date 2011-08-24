@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>NZ Wireless Map</title>
+    <meta name="description" content="A map of New Zealand's point-to-point wireless, microwave and radio links, making up NZ's wireless network.">
+    <meta name="author" content="Mark Hansen">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style>
+      html { height: 100% }
+      body { height: 100%; margin: 0; padding: 0 }
+    </style>
+    <link rel="stylesheet" type="text/css" href="bootstrap/bootstrap-1.1.0.css">
+    <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script>
+    </script>
+  </head>
+  <body>
+    <div class="topbar">
+      <div class="fill">
+        <div class="container">
+          <h3><a href="#">NZ Wireless Map</a></h3>
+          <ul>
+            <li><a href="#about" id="about">About</a></li>
+            <li><a href="#feedback" id="feedback">Give Feedback</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div id="map_canvas" style="position:absolute;top:40px;left:0;right:0;bottom:0"></div>
+    <div id="feedback-dialog" class="modal" style="display:none;">
+      <div class="modal-header">
+        <h3>Give Feedback</h3>
+        <a href="#" class="close">x</a>
+      </div>
+      <div class="modal-body">
+        <p>Comments, feedback, criticism, or suggestions, I'd love to hear from
+        you! You can leave a <a href="//markhansen.co.nz/nz-wireless-map/#disqus-thread">comment on
+          my blog</a>, or <a href="mailto:mark@markhansen.co.nz">email me</a>.
+        </p>
+        <p>Thanks!</p>
+      </div>
+    </div>
+    <div id="about-dialog" class="modal" style="display:none;">
+      <div class="modal-header">
+        <h3>About</h3>
+        <a href="#" class="close">x</a>
+      </div>
+      <div class="modal-body">
+        <p>This map shows registered point-to-point wireless radio links, with
+        data from the government Radio Spectrum Management database.
+        </p>
+        <p>You can click on
+        links to get some information about the type of link, and who owns
+        it.</p>
+        <p>
+        This site was made by <a href="//markhansen.co.nz/">Mark Hansen</a>.
+        If you're into that kind of thing, the code's all available on
+        <a href="https://github.com/mhansen/nzwirelessmap">Github</a>. I also wrote <a href="http://markhansen.co.nz/nz-wireless-map">a blog post
+          explaining how I made this</a>.
+        </p>
+        <p>
+        Many thanks to the people at <a
+          href="http://www.rsm.govt.nz/cms/tools-and-services/spectrum-search-lite">Radio
+          Spectrum Management</a> who make the database available to the
+        public, without which, this site wouldn't be possible.
+        </p>
+        <p>If you have any feedback, criticism, or suggestions, I'd love to
+        hear from you! Leave a <a href="//markhansen.co.nz/nz-wireless-map/">
+          comment on my blog</a>, or <a
+          href="mailto:mark@markhansen.co.nz">email me</a>. Cheers!
+        </p>
+
+      </div>
+    </div>
+    <script>
+      var clicky_site_ids = clicky_site_ids || [];
+      clicky_site_ids.push(66469267);
+      (function() {
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = '//static.getclicky.com/js';
+        ( document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0] ).appendChild( s );
+      })();
+    </script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.js"></script>
+    <script>
+      $(function() {
+        var latlng = new google.maps.LatLng(-41, 174);
+        var myOptions = {
+          zoom: 6,
+          center: latlng,
+          mapTypeId: google.maps.MapTypeId.SATELLITE
+        };
+        var map = new google.maps.Map(document.getElementById("map_canvas"),
+        myOptions);
+        var ftLayer = new google.maps.FusionTablesLayer({
+          query: {
+            select: 'geometry',
+            from: '1338161'
+          }
+        });
+        ftLayer.setMap(map);
+
+        $("a#about").click(function() {
+          $("#about-dialog").toggle();
+        });
+        $("#about-dialog .close").click(function() {
+          $("#about-dialog").hide();
+        });
+        $("a#feedback").click(function() {
+          $("#feedback-dialog").toggle();
+        });
+        $("#feedback-dialog .close").click(function() {
+          $("#feedback-dialog").hide();
+        });
+      });
+    </script>
+    <noscript><p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/66469267ns.gif" /></p></noscript>
+  </body>
+</html>
