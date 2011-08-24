@@ -3,10 +3,14 @@ The goal: Visualise the wireless network links of New Zealand.
 The data's available in the Radio Spectrum Management database, available from
 http://www.rsm.govt.nz/ in MS Access format.
 
-To make a KML file, run
+I've exported the DB into a SQLite file, available here.
 
-    python export.py
+To make a TSV file for import into Fusion Tables,
 
-Here's one I prepared earlier: http://markhansen.co.nz/e.kml
+    python export2tsv.py
 
-More to come.
+To make a KML file for Google Earth,
+
+    python export2kml.py
+
+You can browse the map generated at http://wirelessmap.markhansen.co.nz/.
