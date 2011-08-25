@@ -7,9 +7,10 @@ import sqlite3
 
 conn = sqlite3.connect("prism.sqlite3")
 c = conn.cursor()
-sql = open("getpairs.sql").read()
+sql = open("select_point_to_point_links.sql").read()
 c.execute(sql)
 
+# Print the header row of the spreadsheet
 print "geometry\tName\tLicence Type\tLicence ID\tReceiver\tTransmitter\t" + "rxantennamake\trxantennatype\trxantennaheight\trxazimuth\trxequipment\t" + "txantennamake\ttxantennatype\ttxantennaheight\ttxazimuth\ttxequipment\t" + "rxheight\ttxheight"
 
 def tsvize(s):

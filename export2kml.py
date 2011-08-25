@@ -8,7 +8,7 @@ from xml.sax.saxutils import escape
 
 conn = sqlite3.connect("prism.sqlite3")
 c = conn.cursor()
-sql = open("getpairs.sql").read()
+sql = open("select_point_to_point_links.sql").read()
 c.execute(sql)
 
 print """<?xml version="1.0" encoding="UTF-8"?>
