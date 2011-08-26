@@ -21,6 +21,10 @@
         <div class="container">
           <h3><a href="#">NZ Wireless Map</a></h3>
           <ul>
+            <li class="menu">
+              <a href="#" class="menu">Layers</a>
+              <ul class="menu-dropdown" id="layer_menu"></ul>
+            </li>
             <li><a href="#about" id="about">About</a></li>
             <li><a href="#feedback" id="feedback">Give Feedback</a></li>
           </ul>
@@ -86,38 +90,7 @@
       })();
     </script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.js"></script>
-    <script>
-      $(function() {
-        var latlng = new google.maps.LatLng(-41, 174);
-        var myOptions = {
-          zoom: 6,
-          center: latlng,
-          mapTypeId: google.maps.MapTypeId.SATELLITE
-        };
-        var map = new google.maps.Map(document.getElementById("map_canvas"),
-        myOptions);
-        var ftLayer = new google.maps.FusionTablesLayer({
-          query: {
-            select: 'geometry',
-            from: '1355581'
-          }
-        });
-        ftLayer.setMap(map);
-
-        $("a#about").click(function() {
-          $("#about-dialog").toggle();
-        });
-        $("#about-dialog .close").click(function() {
-          $("#about-dialog").hide();
-        });
-        $("a#feedback").click(function() {
-          $("#feedback-dialog").toggle();
-        });
-        $("#feedback-dialog .close").click(function() {
-          $("#feedback-dialog").hide();
-        });
-      });
-    </script>
+    <script src="index.js"></script>
     <noscript><p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/66469267ns.gif" /></p></noscript>
   </body>
 </html>
