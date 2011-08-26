@@ -1,5 +1,5 @@
 (function() {
-  var checkbox, label, layers, li, map, model, name, queryPointToPointLayer;
+  var layers, map, model, name, queryPointToPointLayer, render_layer_model;
   map = new google.maps.Map($("#map_canvas")[0], {
     center: new google.maps.LatLng(-41, 174),
     zoom: 6,
@@ -48,8 +48,8 @@
       enabled: false
     }
   };
-  for (name in layers) {
-    model = layers[name];
+  render_layer_model = function(name, model) {
+    var checkbox, label, li;
     if (model.enabled) {
       model.layer.setMap(map);
     }
@@ -67,7 +67,11 @@
     });
     label = $("<label>").append(checkbox).append(name);
     li = $("<li>").append(label);
-    $("ul#layer_menu").append(li);
+    return $("ul#layer_menu").append(li);
+  };
+  for (name in layers) {
+    model = layers[name];
+    render_layer_model(name, model);
   }
   $("a#about").click(function() {
     return $("#about-dialog").toggle();
@@ -82,5 +86,14 @@
     var $li;
     $li = $(this).parent("li").toggleClass("open");
     return false;
+  });
+  $("a#add_custom_search").click(function() {
+    var q;
+    q = prompt("Enter Company Name");
+    model = {
+      layer: queryPointToPointLayer("clientname CONTAINS IGNORING CASE '" + q + "'"),
+      enabled: true
+    };
+    return render_layer_model(q, model);
   });
 }).call(this);

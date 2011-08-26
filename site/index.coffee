@@ -1,3 +1,5 @@
+# Main client-side logic for wirelessmap.markhansen.co.nz
+
 # Start the fullscreen map
 map = new google.maps.Map $("#map_canvas")[0], {
   # close enough to the middle of New Zealand that the whole country should
@@ -8,7 +10,7 @@ map = new google.maps.Map $("#map_canvas")[0], {
   mapTypeId: google.maps.MapTypeId.SATELLITE
 }
 
-# A factory for FusionTableLayers querying for a company or something
+# A factory for FusionTableLayers querying for a company or something.
 queryPointToPointLayer = (where_clause) ->
   return new google.maps.FusionTablesLayer {
   query: {
@@ -18,8 +20,8 @@ queryPointToPointLayer = (where_clause) ->
   }
 }
 
-# Main model of the layers
-# Defines the FusionTableLayers, and whether that layer is initially enabled or not
+# Main model of the layers.
+# Defines the FusionTableLayers, and whether that layer is initially enabled or not.
 layers =
   "All Fixed Point Links":
     layer: queryPointToPointLayer ""
@@ -46,12 +48,11 @@ layers =
     layer: queryPointToPointLayer "clientname CONTAINS IGNORING CASE 'tvworks'"
     enabled: false
 
-
-for name, model of layers
-  # paint the layer
+render_layer_model = (name, model) ->
+  # Paint the layer.
   model.layer.setMap map if model.enabled
 
-  # Make a checkbox to add to the 'layers' dropdown
+  # Make a checkbox to add to the 'layers' dropdown.
   checkbox = $("<input type='checkbox'>")
   checkbox.data("model", model)
   checkbox.attr "checked", "checked" if model.enabled
@@ -59,6 +60,7 @@ for name, model of layers
   checkbox.change ->
     if $(this).is(":checked")
       $(this).data("model").layer.setMap map
+
     else
       $(this).data("model").layer.setMap null
 
@@ -66,12 +68,22 @@ for name, model of layers
   li = $("<li>").append(label)
   $("ul#layer_menu").append(li)
 
-# Hook up the logic to show and hide the modal dialogs
+for name, model of layers
+  render_layer_model name, model
+
+# Hook up the logic to show and hide the modal dialogs.
 $("a#about").click -> $("#about-dialog").toggle()
 $("a#feedback").click -> $("#feedback-dialog").toggle()
 $(".close").click -> $(this).parent().parent().hide()
 
-# Logic to show the dropdown menu
+# Hook up the logic to show the dropdown layers list.
 $("a.menu").click (e) ->
   $li = $(this).parent("li").toggleClass("open")
   false
+
+$("a#add_custom_search").click () ->
+  q = prompt "Enter Company Name"
+  model =
+    layer: queryPointToPointLayer "clientname CONTAINS IGNORING CASE '"+q+"'"
+    enabled: true
+  render_layer_model q, model
