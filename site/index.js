@@ -1,12 +1,10 @@
 (function() {
-  var checkbox, label, latlng, layers, li, map, model, myOptions, name, queryPointToPointLayer;
-  latlng = new google.maps.LatLng(-41, 174);
-  myOptions = {
+  var checkbox, label, layers, li, map, model, name, queryPointToPointLayer;
+  map = new google.maps.Map($("#map_canvas")[0], {
+    center: new google.maps.LatLng(-41, 174),
     zoom: 6,
-    center: latlng,
     mapTypeId: google.maps.MapTypeId.SATELLITE
-  };
-  map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+  });
   queryPointToPointLayer = function(where_clause) {
     return new google.maps.FusionTablesLayer({
       query: {
