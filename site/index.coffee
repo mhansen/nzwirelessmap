@@ -38,6 +38,9 @@ layers =
   "Kordia Links":
     layer: queryPointToPointLayer "clientname CONTAINS IGNORING CASE 'kordia'"
     enabled: false
+  "TeamTalk Links":
+    layer: queryPointToPointLayer "clientname CONTAINS IGNORING CASE 'teamtalk'"
+    enabled: false
   "The Radio Network Links":
     layer: queryPointToPointLayer "clientname CONTAINS IGNORING CASE 'the radio network limited'"
     enabled: false
@@ -46,6 +49,9 @@ layers =
     enabled: false
   "TvWorks Links":
     layer: queryPointToPointLayer "clientname CONTAINS IGNORING CASE 'tvworks'"
+    enabled: false
+  "Woosh Links":
+    layer: queryPointToPointLayer "clientname CONTAINS IGNORING CASE 'woosh'"
     enabled: false
 
 render_layer_model = (name, model) ->
@@ -83,7 +89,8 @@ $("a.menu").click (e) ->
 
 $("a#add_custom_search").click () ->
   q = prompt "Enter Company Name"
-  model =
-    layer: queryPointToPointLayer "clientname CONTAINS IGNORING CASE '"+q+"'"
-    enabled: true
-  render_layer_model q, model
+  if q
+    model =
+        layer: queryPointToPointLayer "clientname CONTAINS IGNORING CASE '"+q+"'"
+        enabled: true
+    render_layer_model q, model
