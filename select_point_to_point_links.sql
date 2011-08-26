@@ -8,10 +8,23 @@ rxgeoref.easting||","||rxgeoref.northing||","||rxlocation.locationheight||" "||
 txgeoref.easting||","||txgeoref.northing||","||txlocation.locationheight||
 "</coordinates></LineString>" as kml,
 
+---- Licence Attributes
 licence.licenceid as licenceid,
+trim(licence.clientid) as clientid,
 trim(clientname.name) as clientname,
 trim(licence.licencetype) as licencetype,
 trim(licence.licencecode) as licencecode,
+trim(licence.licencecategory) as licencecategory,
+
+-- Spectrum Attributes
+trim(spectrum.spectrumstatus) as spectrumstatus,
+trim(spectrum.spectrumlabel) as spectrumlabel,
+trim(spectrum.spectrumtype) as spectrumtype,
+spectrum.frequency as frequency,
+spectrum.spectrumlow as spectrumhigh,
+spectrum.spectrumhigh as spectrumhigh,
+spectrum.power as power,
+trim(spectrum.polarisation) as polarisation,
 
 -- Transmit Attributes
 trim(txlocation.locationname) as tx_name,
@@ -37,26 +50,14 @@ trim(receiveconfiguration.rxequipment) as rxequipment
 
 from receiveconfiguration 
 
-JOIN transmitconfiguration 
-using (licenceid) 
-
-JOIN location as rxlocation 
-on rxlocation.locationid = receiveconfiguration.locationid 
-
-JOIN location as txlocation 
-on txlocation.locationid = transmitconfiguration.locationid
-
-JOIN geographicreference as rxgeoref 
-on rxlocation.locationid = rxgeoref.locationid
-
-JOIN geographicreference as txgeoref 
-on txlocation.locationid = txgeoref.locationid
-
-JOIN licence
-on receiveconfiguration.licenceid = licence.licenceid
-
-JOIN clientname
-on licence.clientid = clientname.clientid
+JOIN transmitconfiguration using (licenceid) 
+JOIN location as rxlocation on rxlocation.locationid = receiveconfiguration.locationid 
+JOIN location as txlocation on txlocation.locationid = transmitconfiguration.locationid
+JOIN geographicreference as rxgeoref on rxlocation.locationid = rxgeoref.locationid
+JOIN geographicreference as txgeoref on txlocation.locationid = txgeoref.locationid
+JOIN licence on receiveconfiguration.licenceid = licence.licenceid
+JOIN clientname on licence.clientid = clientname.clientid
+JOIN spectrum on spectrum.licenceid = licence.licenceid
 
 -- Each location has heaps of different geographic reference schema, like old
 -- surveying methods. We're only interested in WGS84, because that's the
