@@ -1,29 +1,39 @@
 -- Objective: find the pairs of towers in point to point links, so we can plot
 -- them on a map.
+.headers ON
+.mode csv
 select 
-receiveconfiguration.licenceid, 
-clientname.name,
-licence.licencetype,
-rxgeoref.easting,
-rxgeoref.northing,
-rxlocation.locationheight,
-txgeoref.easting,
-txgeoref.northing,
-txlocation.locationheight,
-rxlocation.locationname,
-txlocation.locationname,
+"<LineString><coordinates>"||
+rxgeoref.easting||","||rxgeoref.northing||","||rxlocation.locationheight||" "||
+txgeoref.easting||","||txgeoref.northing||","||txlocation.locationheight||
+"</coordinates></LineString>" as kml,
 
-receiveconfiguration.rxantennamake,
-receiveconfiguration.rxantennatype,
-receiveconfiguration.rxantennaheight,
-receiveconfiguration.rxazimuth,
-receiveconfiguration.rxequipment,
+licence.licenceid as licenceid,
+trim(clientname.name) as clientname,
+trim(licence.licencetype) as licencetype,
+trim(licence.licencecode) as licencecode,
 
-transmitconfiguration.txantennamake,
-transmitconfiguration.txantennatype,
-transmitconfiguration.txantennaheight,
-transmitconfiguration.txazimuth,
-transmitconfiguration.txequipment
+-- Transmit Attributes
+trim(txlocation.locationname) as tx_name,
+txgeoref.easting as tx_lng,
+txgeoref.northing as tx_lat,
+txlocation.locationheight as tx_alt,
+trim(transmitconfiguration.txantennamake) as txantennamake,
+trim(transmitconfiguration.txantennatype) as txantennatype,
+transmitconfiguration.txantennaheight as txantennaheight,
+transmitconfiguration.txazimuth as txazimuth,
+trim(transmitconfiguration.txequipment) as txequipment,
+
+-- Receive Attributes
+trim(rxlocation.locationname) as rx_name,
+rxgeoref.easting as rx_lng,
+rxgeoref.northing as rx_lat,
+rxlocation.locationheight as rx_alt,
+trim(receiveconfiguration.rxantennamake) as rxantennamake,
+trim(receiveconfiguration.rxantennatype) as rxantennatype,
+receiveconfiguration.rxantennaheight as rxantennaheight,
+receiveconfiguration.rxazimuth as rxazimuth,
+trim(receiveconfiguration.rxequipment) as rxequipment
 
 from receiveconfiguration 
 
@@ -55,15 +65,10 @@ on licence.clientid = clientname.clientid
 where rxgeoref.georeferencetypeid = 3
 and txgeoref.georeferencetypeid = 3
 
--- locationtypeid = 3 is a "DEFINED AREA" type link
--- locationtypeid = 4 is a "POINT" type link (latlng)
--- locationtypeid = 5 is a "NAME" type link (covering a large area)
--- locationtypeid = 9 is a "MULTIPLE POINTS" type area (usually four latlngs in a square)
--- we're only interested in "POINT" type links. "MULTIPLE POINT" links cover a
--- large square area, and obscure real point-to-point links
-
-and txlocation.locationtypeid = 4 -- select only "POINT"-to
-and rxlocation.locationtypeid = 4 -- "POINT" links
+-- Point-to-point links are identified with a licence.licencecode starting with "F"
+-- The "F" is for "Fixed". TV/Radio links start with "R" and "S"
+-- For more licence codes, SQL: `select distinct licencecode, licencetype from licence;`
+and licence.licencecode LIKE "F%"
 
 -- Geosynchronous satellites are included in the feed.
 -- When plotted on a map, these are massive lines going from NZ to the equator.
