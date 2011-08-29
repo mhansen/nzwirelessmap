@@ -1,81 +1,102 @@
-# Main client-side logic for wirelessmap.markhansen.co.nz
+class Layer extends Backbone.Model
+  defaults:G
+    query: ""
+    shown: false
+
+class LayersList extends Backbone.Collection
+  model: Layer
+
+window.layers = new LayersList
+
+class LayerMapView extends Backbone.View
+  initialize: ->
+    @model.bind "change:shown", @render, this
+    @gmapsLayer = new google.maps.FusionTablesLayer
+      query:
+        select: "kml"
+        from: "1355581"
+        where: @model.get "query"
+  render: ->
+    if @model.get "shown"
+      @gmapsLayer.setMap map
+    else
+      @gmapsLayer.setMap null
+    return this
+
+class LayerListView extends Backbone.View
+  initialize: ->
+    @model.bind "change", @render, this
+  tagName: "li"
+  events:
+    "change .check": "toggleCheckbox"
+  toggleCheckbox: (e) ->
+    @model.set shown: @$("input").is(":checked")
+  render: ->
+    $(@el).children().remove()
+    checkbox = $("<input type='checkbox' class='check'>")
+    checkbox.attr "checked", "checked" if @model.get "shown"
+    label = $("<label>").append(checkbox).append(@model.get("name"))
+    $(@el).append(label)
+    return this
 
 # Start the fullscreen map
-map = new google.maps.Map $("#map_canvas")[0], {
-  # close enough to the middle of New Zealand that the whole country should
-  # be shown when the user first loads the page
+window.map = new google.maps.Map $("#map_canvas")[0],
+  # Center the map close enough to the middle of New Zealand, so that the
+  # whole country should be shown when the user first loads the page
   center: new google.maps.LatLng(-41, 174)
   zoom: 6
   # Satellite view is much nicer for visualising antenna masts
   mapTypeId: google.maps.MapTypeId.SATELLITE
-}
 
-# A factory for FusionTableLayers querying for a company or something.
-queryPointToPointLayer = (where_clause) ->
-  return new google.maps.FusionTablesLayer {
-  query: {
-    select: "kml"
-    from: "1355581"
-    where: where_clause
-  }
-}
+$("a#add_custom_search").click ->
+  q = prompt "Enter Company Name"
+  if q
+    layers.add
+      name: q
+      query: "clientname CONTAINS IGNORING CASE '"+q+"'"
+      shown: true
 
-# Main model of the layers.
-# Defines the FusionTableLayers, and whether that layer is initially enabled or not.
-layers =
-  "All Fixed Point Links":
-    layer: queryPointToPointLayer ""
-    enabled: true
-  "Telecom Links":
-    layer: queryPointToPointLayer "clientname CONTAINS IGNORING CASE 'telecom'"
-    enabled: false
-  "Vodafone Links":
-    layer: queryPointToPointLayer "clientname CONTAINS IGNORING CASE 'vodafone'"
-    enabled: false
-  "Two Degrees Links":
-    layer: queryPointToPointLayer "clientname CONTAINS IGNORING CASE 'two degrees'"
-    enabled: false
-  "Kordia Links":
-    layer: queryPointToPointLayer "clientname CONTAINS IGNORING CASE 'kordia'"
-    enabled: false
-  "TeamTalk Links":
-    layer: queryPointToPointLayer "clientname CONTAINS IGNORING CASE 'teamtalk'"
-    enabled: false
-  "The Radio Network Links":
-    layer: queryPointToPointLayer "clientname CONTAINS IGNORING CASE 'the radio network limited'"
-    enabled: false
-  "RadioWorks Links":
-    layer: queryPointToPointLayer "clientname CONTAINS IGNORING CASE 'radioworks'"
-    enabled: false
-  "TvWorks Links":
-    layer: queryPointToPointLayer "clientname CONTAINS IGNORING CASE 'tvworks'"
-    enabled: false
-  "Woosh Links":
-    layer: queryPointToPointLayer "clientname CONTAINS IGNORING CASE 'woosh'"
-    enabled: false
+addAll = -> layers.each(addOne)
+addOne = (layer) ->
+  mapView = new LayerMapView { model: layer }
+  mapView.render()
+  listView  = new LayerListView { model: layer }
+  $("ul#layer_menu").append(listView.render().el)
 
-render_layer_model = (name, model) ->
-  # Paint the layer.
-  model.layer.setMap map if model.enabled
-
-  # Make a checkbox to add to the 'layers' dropdown.
-  checkbox = $("<input type='checkbox'>")
-  checkbox.data("model", model)
-  checkbox.attr "checked", "checked" if model.enabled
-
-  checkbox.change ->
-    if $(this).is(":checked")
-      $(this).data("model").layer.setMap map
-
-    else
-      $(this).data("model").layer.setMap null
-
-  label = $("<label>").append(checkbox).append(name)
-  li = $("<li>").append(label)
-  $("ul#layer_menu").append(li)
-
-for name, model of layers
-  render_layer_model name, model
+layers.bind 'reset', addAll
+layers.bind 'add', addOne
+layers.reset [
+  new Layer
+    name: "All Fixed Point Links"
+    shown: true
+  new Layer
+    name: "Telecom Links"
+    query: "clientname CONTAINS IGNORING CASE 'telecom'"
+  new Layer
+    name: "Vodafone Links"
+    query: "clientname CONTAINS IGNORING CASE 'vodafone'"
+  new Layer
+    name: "Two Degrees Links"
+    query: "clientname CONTAINS IGNORING CASE 'two degrees'"
+  new Layer
+    name: "Kordia Links"
+    query: "clientname CONTAINS IGNORING CASE 'kordia'"
+  new Layer
+    name: "TeamTalk Links"
+    query: "clientname CONTAINS IGNORING CASE 'teamtalk'"
+  new Layer
+    name: "The Radio Network Links"
+    query: "clientname CONTAINS IGNORING CASE 'the radio network limited'"
+  new Layer
+    name: "RadioWorks Links"
+    query: "clientname CONTAINS IGNORING CASE 'radioworks'"
+  new Layer
+    name: "TvWorks Links"
+    query: "clientname CONTAINS IGNORING CASE 'tvworks'"
+  new Layer
+    name: "Woosh Links"
+    query: "clientname CONTAINS IGNORING CASE 'woosh'"
+]
 
 # Hook up the logic to show and hide the modal dialogs.
 $("a#about").click -> $("#about-dialog").toggle()
@@ -86,11 +107,3 @@ $(".close").click -> $(this).parent().parent().hide()
 $("a.menu").click (e) ->
   $li = $(this).parent("li").toggleClass("open")
   false
-
-$("a#add_custom_search").click () ->
-  q = prompt "Enter Company Name"
-  if q
-    model =
-        layer: queryPointToPointLayer "clientname CONTAINS IGNORING CASE '"+q+"'"
-        enabled: true
-    render_layer_model q, model
