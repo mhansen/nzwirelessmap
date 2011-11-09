@@ -16,6 +16,11 @@ class LayerMapView extends Backbone.View
         select: "kml"
         from: "1355581"
         where: @model.get "query"
+    google.maps.event.addListener @gmapsLayer, 'click', (e) =>
+      mpq.track "Clicked Radio Link"
+        layerName: @model.get "name"
+        licenceid: e.row.clientid.value
+        clientname: e.row.clientname.value
   render: ->
     if @model.get "shown"
       @gmapsLayer.setMap map
