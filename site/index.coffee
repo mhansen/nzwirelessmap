@@ -114,8 +114,14 @@ layers.reset [
 ]
 
 # Hook up the logic to show and hide the modal dialogs.
-$("a#about").click -> $("#about-dialog").toggle()
-$("a#feedback").click -> $("#feedback-dialog").toggle()
+$("a#about").click ->
+  if not $("#about-dialog").is ":visible"
+    mpq.track "Opened About Dialog"
+  $("#about-dialog").toggle()
+$("a#feedback").click ->
+  if not $("#feedback-dialog").is ":visible"
+    mpq.track "Opened Feedback Dialog"
+  $("#feedback-dialog").toggle()
 $(".close").click -> $(this).parent().parent().hide()
 
 # Hook up the logic to show the dropdown layers list.
