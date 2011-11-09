@@ -126,5 +126,8 @@ $(".close").click -> $(this).parent().parent().hide()
 
 # Hook up the logic to show the dropdown layers list.
 $("a.menu").click (e) ->
-  $li = $(this).parent("li").toggleClass("open")
+  parentLi = $(this).parent("li")
+  if not parentLi.hasClass "open"
+    mpq.track "Layers Dropdown"
+  parentLi.toggleClass("open")
   false
