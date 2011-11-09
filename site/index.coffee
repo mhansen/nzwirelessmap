@@ -1,5 +1,5 @@
 class Layer extends Backbone.Model
-  defaults:G
+  defaults:
     query: ""
     shown: false
 
