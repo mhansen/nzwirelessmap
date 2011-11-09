@@ -43,7 +43,7 @@ class LayerListView extends Backbone.View
     $(@el).children().remove()
     checkbox = $("<input type='checkbox' class='check'>")
     checkbox.attr "checked", "checked" if @model.get "shown"
-    label = $("<label>").append(checkbox).append(@model.get("name"))
+    label = $("<label>").append(checkbox).append(@model.get "name")
     $(@el).append(label)
     return this
 
@@ -73,10 +73,13 @@ $("a#add_custom_search").click ->
 
 addAll = -> layers.each(addOne)
 addOne = (layer) ->
-  mapView = new LayerMapView { model: layer }
+  mapView = new LayerMapView
+    model: layer
   mapView.render()
-  listView  = new LayerListView { model: layer }
-  $("ul#layer_menu").append(listView.render().el)
+  listView  = new LayerListView
+    model: layer
+  el = listView.render().el
+  $("ul#layer_menu").append el
 
 layers.bind 'reset', addAll
 layers.bind 'add', addOne
