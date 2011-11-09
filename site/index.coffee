@@ -35,7 +35,10 @@ class LayerListView extends Backbone.View
   events:
     "change .check": "toggleCheckbox"
   toggleCheckbox: (e) ->
-    @model.set shown: @$("input").is(":checked")
+    isChecked = @$("input").is ":checked"
+    @model.set shown: isChecked
+    event = if isChecked then "Showed Layer" else "Hid Layer"
+    mpq.track event, name: @model.get "name"
   render: ->
     $(@el).children().remove()
     checkbox = $("<input type='checkbox' class='check'>")
