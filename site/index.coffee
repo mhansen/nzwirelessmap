@@ -69,6 +69,7 @@ $("a#add_custom_search").click ->
       name: q
       query: "clientname CONTAINS IGNORING CASE '"+q+"'"
       shown: true
+    mpq.track "Added Custom Layer", searchTerm: q
 
 addAll = -> layers.each(addOne)
 addOne = (layer) ->
