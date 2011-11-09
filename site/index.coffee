@@ -56,6 +56,12 @@ window.map = new google.maps.Map $("#map_canvas")[0],
   # Satellite view is much nicer for visualising antenna masts
   mapTypeId: google.maps.MapTypeId.SATELLITE
 
+track_bounds_changed = -> mpq.track "Bounds Changed"
+throttled_track_bounds_changed = _.throttle track_bounds_changed, 1000
+
+google.maps.event.addListener map, 'bounds_changed', ->
+  throttled_track_bounds_changed()
+
 $("a#add_custom_search").click ->
   q = prompt "Enter Company Name"
   if q
