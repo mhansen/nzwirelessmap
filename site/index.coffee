@@ -17,10 +17,13 @@ class LayerMapView extends Backbone.View
         from: "1355581"
         where: @model.get "query"
     google.maps.event.addListener @gmapsLayer, 'click', (e) =>
+      licenceid = e.row.licenceid.value
+      clientname = e.row.clientname.value
       mpq.track "Clicked Radio Link"
         layerName: @model.get "name"
-        licenceid: e.row.clientid.value
-        clientname: e.row.clientname.value
+        licenceid: licenceid
+        clientname: clientname
+        mp_note: "client: #{clientname}, licence: #{licenceid}"
   render: ->
     if @model.get "shown"
       @gmapsLayer.setMap map
@@ -38,7 +41,10 @@ class LayerListView extends Backbone.View
     isChecked = @$("input").is ":checked"
     @model.set shown: isChecked
     event = if isChecked then "Showed Layer" else "Hid Layer"
-    mpq.track event, name: @model.get "name"
+    layerName: @model.get "name"
+    mpq.track event,
+      name: layerName
+      mp_note: "layer: #{layerName}"
   render: ->
     $(@el).children().remove()
     checkbox = $("<input type='checkbox' class='check'>")
@@ -69,7 +75,9 @@ $("a#add_custom_search").click ->
       name: q
       query: "clientname CONTAINS IGNORING CASE '"+q+"'"
       shown: true
-    mpq.track "Added Custom Layer", searchTerm: q
+    mpq.track "Added Custom Layer"
+      searchTerm: q
+      mp_note: "term: '#{q}'"
 
 addAll = -> layers.each(addOne)
 addOne = (layer) ->
