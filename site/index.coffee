@@ -2,6 +2,7 @@ class Layer extends Backbone.Model
   defaults:
     query: ""
     shown: false
+    showsAllConnections: false
 
 class LayersList extends Backbone.Collection
   model: Layer
@@ -39,9 +40,15 @@ class LayerListView extends Backbone.View
     "change .check": "toggleCheckbox"
   toggleCheckbox: (e) ->
     isChecked = @$("input").is ":checked"
+
+    # If we're selecting a more specific layer, hide the 'show everything'
+    # layer.
+    if @model.get("showsAllConnections") == false and @model.get("shown") == false
+      allConnectionsLayer.set shown: false
+
     @model.set shown: isChecked
     event = if isChecked then "Showed Layer" else "Hid Layer"
-    layerName: @model.get "name"
+    layerName = @model.get "name"
     mpq.track event,
       name: layerName
       mp_note: "layer: #{layerName}"
@@ -91,10 +98,12 @@ addOne = (layer) ->
 
 layers.bind 'reset', addAll
 layers.bind 'add', addOne
-layers.reset [
-  new Layer
+allConnectionsLayer = new Layer
     name: "All Fixed Point Links"
+    showsAllConnections: true
     shown: true
+layers.reset [
+  allConnectionsLayer
   new Layer
     name: "Telecom Links"
     query: "clientname CONTAINS IGNORING CASE 'telecom'"
