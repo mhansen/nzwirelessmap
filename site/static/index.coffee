@@ -1,15 +1,25 @@
+# Layer model
+#
+# - query: the Fusion Tables Query
+# - shown: whether the layer is shown on the map
+# - showsAllConnections: is the layer the special 'All Layers' layer?
+#
+# You can listen to change events on this model.
 class Layer extends Backbone.Model
   defaults:
     query: ""
     shown: false
     showsAllConnections: false
 
+# A Backbone collection of layers - you can listen to add/remove events.
 class LayersList extends Backbone.Collection
   model: Layer
 
 window.layers = new LayersList
 
+# Map View class.
 class LayerMapView extends Backbone.View
+  # Construct the map
   initialize: ->
     @model.bind "change:shown", @render, this
     @gmapsLayer = new google.maps.FusionTablesLayer
@@ -25,6 +35,7 @@ class LayerMapView extends Backbone.View
         licenceid: licenceid
         clientname: clientname
         mp_note: "client: #{clientname}, licence: #{licenceid}"
+  # Render the layer onto the map
   render: ->
     if @model.get "shown"
       @gmapsLayer.setMap map
@@ -32,10 +43,13 @@ class LayerMapView extends Backbone.View
       @gmapsLayer.setMap null
     return this
 
+# Layer Checkbox List View class
 class LayerListView extends Backbone.View
+  # Constructor
   initialize: ->
     @model.bind "change", @render, this
   tagName: "li"
+  # jQuery events to delegate
   events:
     "change .check": "toggleCheckbox"
   toggleCheckbox: (e) ->
@@ -52,6 +66,7 @@ class LayerListView extends Backbone.View
     mpq.track event,
       name: layerName
       mp_note: "layer: #{layerName}"
+  # Render the view
   render: ->
     $(@el).children().remove()
     checkbox = $("<input type='checkbox' class='check'>")
@@ -69,6 +84,7 @@ window.map = new google.maps.Map $("#map_canvas")[0],
   # Satellite view is much nicer for visualising antenna masts
   mapTypeId: google.maps.MapTypeId.SATELLITE
 
+# Analytics code for measuring engagement with mixpanel.
 track_bounds_changed = -> mpq.track "Bounds Changed"
 throttled_track_bounds_changed = _.throttle track_bounds_changed, 1000
 
@@ -102,6 +118,7 @@ allConnectionsLayer = new Layer
     name: "All Fixed Point Links"
     showsAllConnections: true
     shown: true
+# Initialize layers with some common radio links.
 layers.reset [
   allConnectionsLayer
   new Layer

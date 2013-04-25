@@ -1,0 +1,29 @@
+file "prism.mdb" do |t|
+  sh "curl http://www.rsm.govt.nz/cms/pdf-library/resource-library/spectrum-search-lite/spectrum-search-lite-database | funzip > #{t.name}"
+end
+
+file "prism.sqlite3" => ["prism.mdb"] do |t|
+  sh "rm -f #{t.name}"
+  sh "java -jar lib/mdb-sqlite.jar #{t.prerequisites[0]} #{t.name}"
+  # by default, the generated database has no idea what it looks like, so it
+  # makes all kinds of bad decisions when planning queries. We ask the database
+  # to analyze itself, so it can make an informed decision about how to do
+  # massive JOINs.
+  sh "echo 'analyze main;' | sqlite3 #{t.name}"
+end
+
+file "point_to_point_links.csv" => ["prism.sqlite3", "select_point_to_point_links.sql"] do |t|
+  sh "cat select_point_to_point_links.sql | sqlite3 prism.sqlite3 > #{t.name}"
+end
+
+task "update_fusion_tables", [:refresh_token] => ["point_to_point_links.csv", "fusiontables.py"] do |t, args|
+  sh "cat #{t.prerequisites[0]} | python #{t.prerequisites[1]} --refresh_token=#{args.refresh_token}"
+end
+
+file "site/static/index.js" => ["site/static/index.coffee"] do |t|
+  sh "coffee -c #{t.prerequisites.join(' ')}"
+end
+
+task "deploy_to_app_engine" => ["site/static/index.js"] do
+  sh "~/Downloads/google_appengine/appcfg.py update site/ --oauth2"
+end
