@@ -1,3 +1,4 @@
 prism.sqlite3
 *.pyc
 *.swp
+site/static/*.js
