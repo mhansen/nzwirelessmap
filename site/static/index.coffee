@@ -30,7 +30,7 @@ class LayerMapView extends Backbone.View
     google.maps.event.addListener @gmapsLayer, 'click', (e) =>
       licenceid = e.row.licenceid.value
       clientname = e.row.clientname.value
-      mpq.track "Clicked Radio Link"
+      track "Clicked Radio Link",
         layerName: @model.get "name"
         licenceid: licenceid
         clientname: clientname
@@ -63,7 +63,7 @@ class LayerListView extends Backbone.View
     @model.set shown: isChecked
     event = if isChecked then "Showed Layer" else "Hid Layer"
     layerName = @model.get "name"
-    mpq.track event,
+    track event,
       name: layerName
       mp_note: "layer: #{layerName}"
   # Render the view
@@ -85,7 +85,7 @@ window.map = new google.maps.Map $("#map_canvas")[0],
   mapTypeId: google.maps.MapTypeId.SATELLITE
 
 # Analytics code for measuring engagement with mixpanel.
-track_bounds_changed = -> mpq.track "Bounds Changed"
+track_bounds_changed = -> track "Bounds Changed"
 throttled_track_bounds_changed = _.throttle track_bounds_changed, 1000
 
 google.maps.event.addListener map, 'bounds_changed', ->
@@ -98,7 +98,7 @@ $("a#add_custom_search").click ->
       name: q
       query: "clientname CONTAINS IGNORING CASE '"+q+"'"
       shown: true
-    mpq.track "Added Custom Layer"
+    track "Added Custom Layer",
       searchTerm: q
       mp_note: "term: '#{q}'"
 
@@ -122,8 +122,8 @@ allConnectionsLayer = new Layer
 layers.reset [
   allConnectionsLayer
   new Layer
-    name: "Telecom Links"
-    query: "clientname CONTAINS IGNORING CASE 'telecom'"
+    name: "Chorus Links"
+    query: "clientname CONTAINS IGNORING CASE 'chorus'"
   new Layer
     name: "Vodafone Links"
     query: "clientname CONTAINS IGNORING CASE 'vodafone'"
@@ -153,18 +153,24 @@ layers.reset [
 # Hook up the logic to show and hide the modal dialogs.
 $("a#about").click ->
   if not $("#about-dialog").is ":visible"
-    mpq.track "Opened About Dialog"
+    track "Opened About Dialog"
   $("#about-dialog").toggle()
+
 $("a#feedback").click ->
   if not $("#feedback-dialog").is ":visible"
-    mpq.track "Opened Feedback Dialog"
+    track "Opened Feedback Dialog"
   $("#feedback-dialog").toggle()
-$(".close").click -> $(this).parent().parent().hide()
+
+$(".close").click ->
+  $(this).parent().parent().hide()
 
 # Hook up the logic to show the dropdown layers list.
 $("a.menu").click (e) ->
   parentLi = $(this).parent("li")
   if not parentLi.hasClass "open"
-    mpq.track "Layers Dropdown"
+    track "Layers Dropdown"
   parentLi.toggleClass("open")
   false
+
+track = ->
+  # Do nothing, tracking's disabled.
