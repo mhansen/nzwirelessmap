@@ -1,4 +1,7 @@
 prism.sqlite3
+prism.mdb
+prism.zip
+point_to_point_links.csv
 *.pyc
 *.swp
 site/static/*.js
