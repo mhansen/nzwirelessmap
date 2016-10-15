@@ -5,17 +5,17 @@ http://www.rsm.govt.nz/ in MS Access format.
 
 ## Instructions
 
-To download the MDB database from RSM, run:
+To download the MDB database from RSM, convert the MDB database
+into a cross-platform SQLite database, and make a CSV file for
+import into Fusion Tables, run
 
-    bash 0-fetch-new-database.sh
+    $ rake point_to_point_links.csv
 
-To convert the MDB database into a cross-platform SQLite database, run:
+Then upload to fusion tables with
 
-    bash 1-convert-mdb-to-sqlite3.sh
-    
-To make a CSV file for import into Fusion Tables,
+    $ rake update_fusion_tables[{refresh_token}]
 
-    sqlite3 prism.sqlite3 < select_point_to_point_links.sql > p2p.csv
+where {refresh\_token} is a pre-generated token that grants access to your Fusion Tables.
 
 You can browse the map generated at http://wirelessmap.markhansen.co.nz/.
 

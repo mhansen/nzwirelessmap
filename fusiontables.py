@@ -4,6 +4,9 @@ import requests
 import sys
 import logging
 
+root = logging.getLogger()
+root.setLevel(logging.INFO)
+
 FLAGS = gflags.FLAGS
 gflags.DEFINE_string('refresh_token', None, 'OAuth 2 Refresh Token')
 FLAGS(sys.argv)

@@ -137,15 +137,6 @@ layers.reset [
     name: "TeamTalk Links"
     query: "clientname CONTAINS IGNORING CASE 'teamtalk'"
   new Layer
-    name: "The Radio Network Links"
-    query: "clientname CONTAINS IGNORING CASE 'the radio network limited'"
-  new Layer
-    name: "RadioWorks Links"
-    query: "clientname CONTAINS IGNORING CASE 'radioworks'"
-  new Layer
-    name: "TvWorks Links"
-    query: "clientname CONTAINS IGNORING CASE 'tvworks'"
-  new Layer
     name: "Woosh Links"
     query: "clientname CONTAINS IGNORING CASE 'woosh'"
 ]
