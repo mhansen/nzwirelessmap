@@ -30,11 +30,6 @@ class LayerMapView extends Backbone.View
     google.maps.event.addListener @gmapsLayer, 'click', (e) =>
       licenceid = e.row.licenceid.value
       clientname = e.row.clientname.value
-      track "Clicked Radio Link",
-        layerName: @model.get "name"
-        licenceid: licenceid
-        clientname: clientname
-        mp_note: "client: #{clientname}, licence: #{licenceid}"
   # Render the layer onto the map
   render: ->
     if @model.get "shown"
@@ -57,26 +52,29 @@ class LayerListView extends Backbone.View
 
     # If we're selecting a more specific layer, hide the 'show everything'
     # layer.
-    if @model.get("showsAllConnections") == false and @model.get("shown") == false
+    if @model.get("showsAllConnections") == false and !@model.get("shown")
       allConnectionsLayer.set shown: false
 
     @model.set shown: isChecked
     event = if isChecked then "Showed Layer" else "Hid Layer"
     layerName = @model.get "name"
-    track event,
-      name: layerName
-      mp_note: "layer: #{layerName}"
   # Render the view
   render: ->
     $(@el).children().remove()
-    checkbox = $("<input type='checkbox' class='check'>")
-    checkbox.attr "checked", "checked" if @model.get "shown"
-    label = $("<label>").append(checkbox).append(@model.get "name")
-    $(@el).append(label)
+    checkbox = document.createElement('input')
+    checkbox.type = 'checkbox'
+    checkbox.className = 'check'
+    checkbox.checked = @model.get "shown"
+
+    label = document.createElement('label')
+    label.appendChild(checkbox)
+    label.appendChild(document.createTextNode(@model.get "name"))
+
+    @el.appendChild(label)
     return this
 
 # Start the fullscreen map
-window.map = new google.maps.Map $("#map_canvas")[0],
+window.map = new google.maps.Map document.getElementById("map_canvas"),
   # Center the map close enough to the middle of New Zealand, so that the
   # whole country should be shown when the user first loads the page
   center: new google.maps.LatLng(-41, 174)
@@ -84,23 +82,13 @@ window.map = new google.maps.Map $("#map_canvas")[0],
   # Satellite view is much nicer for visualising antenna masts
   mapTypeId: google.maps.MapTypeId.SATELLITE
 
-# Analytics code for measuring engagement with mixpanel.
-track_bounds_changed = -> track "Bounds Changed"
-throttled_track_bounds_changed = _.throttle track_bounds_changed, 1000
-
-google.maps.event.addListener map, 'bounds_changed', ->
-  throttled_track_bounds_changed()
-
-$("a#add_custom_search").click ->
+document.getElementById("add_custom_search").addEventListener 'click', ->
   q = prompt "Enter Company Name"
   if q
     layers.add
       name: q
       query: "clientname CONTAINS IGNORING CASE '"+q+"'"
       shown: true
-    track "Added Custom Layer",
-      searchTerm: q
-      mp_note: "term: '#{q}'"
 
 addAll = -> layers.each(addOne)
 addOne = (layer) ->
@@ -110,58 +98,51 @@ addOne = (layer) ->
   listView  = new LayerListView
     model: layer
   el = listView.render().el
-  $("ul#layer_menu").append el
+  document.getElementById("layer_menu").appendChild(el)
 
 layers.bind 'reset', addAll
 layers.bind 'add', addOne
 allConnectionsLayer = new Layer
-    name: "All Fixed Point Links"
-    showsAllConnections: true
-    shown: true
+  name: "All Fixed Point Links"
+  showsAllConnections: true
+  shown: true
+
 # Initialize layers with some common radio links.
 layers.reset [
   allConnectionsLayer
   new Layer
-    name: "Chorus Links"
+    name: "Chorus"
     query: "clientname CONTAINS IGNORING CASE 'chorus'"
   new Layer
-    name: "Vodafone Links"
+    name: "Vodafone"
     query: "clientname CONTAINS IGNORING CASE 'vodafone'"
   new Layer
-    name: "Two Degrees Links"
+    name: "Two Degrees"
     query: "clientname CONTAINS IGNORING CASE 'two degrees'"
   new Layer
-    name: "Kordia Links"
+    name: "Kordia"
     query: "clientname CONTAINS IGNORING CASE 'kordia'"
   new Layer
-    name: "TeamTalk Links"
+    name: "TeamTalk"
     query: "clientname CONTAINS IGNORING CASE 'teamtalk'"
   new Layer
-    name: "Woosh Links"
+    name: "Woosh"
     query: "clientname CONTAINS IGNORING CASE 'woosh'"
 ]
 
 # Hook up the logic to show and hide the modal dialogs.
-$("a#about").click ->
-  if not $("#about-dialog").is ":visible"
-    track "Opened About Dialog"
+document.getElementById("about").addEventListener 'click', ->
   $("#about-dialog").toggle()
 
-$("a#feedback").click ->
-  if not $("#feedback-dialog").is ":visible"
-    track "Opened Feedback Dialog"
+document.getElementById("feedback").addEventListener 'click', ->
   $("#feedback-dialog").toggle()
 
-$(".close").click ->
-  $(this).parent().parent().hide()
+document.querySelectorAll(".close").forEach (el) =>
+  el.addEventListener 'click', (e) ->
+    $(e.target).parent().parent().hide()
 
 # Hook up the logic to show the dropdown layers list.
-$("a.menu").click (e) ->
-  parentLi = $(this).parent("li")
-  if not parentLi.hasClass "open"
-    track "Layers Dropdown"
-  parentLi.toggleClass("open")
+document.getElementById("layers_link").addEventListener 'click', (e) ->
+  console.log 'foo'
+  $(e.target).parent("li").toggleClass("open")
   false
-
-track = ->
-  # Do nothing, tracking's disabled.
