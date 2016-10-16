@@ -108,27 +108,12 @@ allConnectionsLayer = new Layer
   shown: true
 
 # Initialize layers with some common radio links.
-layers.reset [
-  allConnectionsLayer
+initialLayers = topClients.map (c) => 
   new Layer
-    name: "Chorus"
-    query: "clientname CONTAINS IGNORING CASE 'chorus'"
-  new Layer
-    name: "Vodafone"
-    query: "clientname CONTAINS IGNORING CASE 'vodafone'"
-  new Layer
-    name: "Two Degrees"
-    query: "clientname CONTAINS IGNORING CASE 'two degrees'"
-  new Layer
-    name: "Kordia"
-    query: "clientname CONTAINS IGNORING CASE 'kordia'"
-  new Layer
-    name: "TeamTalk"
-    query: "clientname CONTAINS IGNORING CASE 'teamtalk'"
-  new Layer
-    name: "Woosh"
-    query: "clientname CONTAINS IGNORING CASE 'woosh'"
-]
+    name: c
+    query: "clientname CONTAINS IGNORING CASE '" + c + "'"
+initialLayers.unshift(allConnectionsLayer)
+layers.reset initialLayers
 
 # Hook up the logic to show and hide the modal dialogs.
 document.getElementById("about").addEventListener 'click', ->

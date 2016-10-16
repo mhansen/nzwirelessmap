@@ -11,7 +11,6 @@
       body { height: 100%; margin: 0; padding: 0 }
     </style>
     <link rel="stylesheet" href="lib/bootstrap/bootstrap-1.1.0.css">
-    <script src="//maps.googleapis.com/maps/api/js?key=AIzaSyBMxhigfinK9Rm5U8KspXKgZXifY1zVaUM"></script>
   </head>
   <body>
     <div class="topbar">
@@ -21,13 +20,13 @@
           <ul>
             <li class="menu">
               <a id='layers_link' href="#">Layers</a>
-              <ul class="menu-dropdown" id="layer_menu">
-                <li><a href="#" id="add_custom_search">Add Custom Search...</a></li>
+              <ul class="menu-dropdown" id="layer_menu" style="width: 200px">
+                <li><a href="#" id="add_custom_search">Add Custom Search...</a>
               </ul>
             </li>
-            <li><a href="#about" id="about">About</a></li>
-            <li><a href="#feedback" id="feedback">Feedback</a></li>
-            <li><a>Data updated 2016-10-15</a></li>
+            <li><a href="#about" id="about">About</a>
+            <li><a href="#feedback" id="feedback">Feedback</a>
+            <li><a>Data updated 2016-10-15</a>
           </ul>
         </div>
       </div>
@@ -42,8 +41,7 @@
         <p>Comments, feedback, criticism, or suggestions, I'd love to hear from
         you! You can leave a <a href="//markhansen.co.nz/nz-wireless-map/#disqus-thread">comment on
           my blog</a>, or <a href="mailto:mark@markhansen.co.nz">email me</a>.
-        </p>
-        <p>Thanks!</p>
+        <p>Thanks!
       </div>
     </div>
     <div id="about-dialog" class="modal" style="display:none;">
@@ -54,35 +52,34 @@
       <div class="modal-body">
         <p>This map shows registered point-to-point wireless radio links, with
         data from the government Radio Spectrum Management database.
-        </p>
         <p>You can click on
         links to get some information about the type of link, and who owns
-        it.</p>
+        it.
         <p>
         This site was made by <a href="//markhansen.co.nz/">Mark Hansen</a>.
         If you're into that kind of thing, the code's all available on
         <a href="https://github.com/mhansen/nzwirelessmap">Github</a>. I also wrote <a href="http://markhansen.co.nz/nz-wireless-map">a blog post
           explaining how I made this</a>.
-        </p>
         <p>
         Many thanks to the people at <a
           href="http://www.rsm.govt.nz/cms/tools-and-services/spectrum-search-lite">Radio
           Spectrum Management</a> who make the database available to the
         public, without which, this site wouldn't be possible. The data is <a
-          href="http://www.rsm.govt.nz/cms/customer-support/about-this-site/copyright">Crown
+          href="http://www.rsm.govt.nz/about-this-site/copyright-c/">Crown
           Copyright</a>, with permission to reproduce accurately in any format.
-        </p>
         <p>If you have any feedback, criticism, or suggestions, I'd love to
         hear from you! Leave a <a href="//markhansen.co.nz/nz-wireless-map/">
           comment on my blog</a>, or <a
           href="mailto:mark@markhansen.co.nz">email me</a>. Cheers!
-        </p>
+        <p>If you'd like to do more powerful filtering, try <a href="https://fusiontables.google.com/DataSource?docid=1fAeKubYzWae7KT2qYFzku1M6N3c1Gncs1XDgPOc#rows:id=1">Google Fusion Tables on the raw data</a> behind this site.
         <p>You might also like <a href="http://broadbandmap.govt.nz/">Broadband Map</a>.</p>
       </div>
     </div>
+    <script src="//maps.googleapis.com/maps/api/js?key=AIzaSyBMxhigfinK9Rm5U8KspXKgZXifY1zVaUM"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.js"></script>
     <script src="lib/underscore-min.js"></script>
     <script src="lib/backbone-min.js"></script>
+    <script src="top_clients.js"></script>
     <script src="index.js"></script>
   </body>
 </html>
