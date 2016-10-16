@@ -128,6 +128,5 @@ document.querySelectorAll(".close").forEach (el) =>
 
 # Hook up the logic to show the dropdown layers list.
 document.getElementById("layers_link").addEventListener 'click', (e) ->
-  console.log 'foo'
   $(e.target).parent("li").toggleClass("open")
   false
