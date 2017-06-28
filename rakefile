@@ -28,10 +28,6 @@ task "update_fusion_tables", [:refresh_token] => ["point_to_point_links.csv", "f
   sh "cat #{t.prerequisites[0]} | python #{t.prerequisites[1]} --refresh_token=#{args.refresh_token}"
 end
 
-file "site/static/index.js" => ["site/static/index.coffee"] do |t|
-  sh "coffee -c #{t.prerequisites.join(' ')}"
-end
-
 task "deploy_to_app_engine" => ["site/static/index.js"] do
   sh "~/Downloads/google_appengine/appcfg.py update site/ --oauth2"
 end
