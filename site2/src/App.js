@@ -59,22 +59,27 @@ class App extends Component {
     this.setState({q: newValue});
   }
 
+  drawerChanged = (open) => {
+    this.setState({open: open});
+  }
+
   render() {
     return (
       <MuiThemeProvider>
         <div className="App">
           <AppBar
-           title="NZ Wireless Map"
-              onLeftIconButtonTouchTap={this.toggleDrawer}
-              iconElementRight={
-            <TextField placeholder="Search Client Names" value={this.state.q} onChange={this.textFieldChange}/>}>
+            style={{position: 'absolute'}}
+            title="NZ Wireless Map"
+            onLeftIconButtonTouchTap={this.toggleDrawer}
+            iconElementRight={
+              <TextField placeholder="Search Licensee" value={this.state.q} onChange={this.textFieldChange}/>}>
           </AppBar>
           <SimpleExampleGoogleMap
-           containerElement={<div style={{ height: `90%` }} />}
+           containerElement={<div style={{ height: `100%` }} />}
             mapElement={ <div style={{ height: `100%` }} /> }
             q={this.query()}
             />
-          <Drawer open={this.state.open} openSecondary={true}>
+          <Drawer open={this.state.open} onRequestChange={this.drawerChanged} docked={false}>
             <RaisedButton label="Chorus" onTouchTap={this.chorus}/>
             <RaisedButton label="TVNZ" onTouchTap={this.tvnz}/>
           </Drawer>
