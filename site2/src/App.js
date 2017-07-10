@@ -99,7 +99,6 @@ export default class App extends React.Component {
             style={{position: 'absolute'}}
             title="NZ Wireless Map"
             onLeftIconButtonTouchTap={this.toggleAbout}
-            onTitleTouchTap={this.toggleSearch}
             iconElementRight={
               <div>
               { 
