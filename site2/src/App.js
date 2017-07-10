@@ -2,10 +2,10 @@
 import React, { Component } from 'react';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import RaisedButton from 'material-ui/RaisedButton'
 import AppBar from 'material-ui/AppBar'
-import Drawer from 'material-ui/Drawer'
 import TextField from 'material-ui/TextField'
+import About from './About'
+import Dialog from 'material-ui/Dialog'
 
 import {withGoogleMap, GoogleMap, FusionTablesLayer} from 'react-google-maps';
 
@@ -32,7 +32,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: false,
+      aboutOpen: false,
       q: ''
     };
   }
@@ -41,26 +41,18 @@ class App extends Component {
     return `clientname CONTAINS IGNORING CASE '${this.state.q}'`;
   }
 
-  toggleDrawer = () => {
+  toggleAbout = () => {
     this.setState({
-      open: !this.state.open
+      aboutOpen: !this.state.aboutOpen
     });
-  }
-
-  chorus = () => {
-    this.setState({q: 'chorus'});
-  }
-
-  tvnz = () => {
-    this.setState({q: 'mediaworks'});
   }
 
   textFieldChange = (e, newValue) => {
     this.setState({q: newValue});
   }
 
-  drawerChanged = (open) => {
-    this.setState({open: open});
+  dialogClosed = () => {
+    this.setState({aboutOpen: false});
   }
 
   render() {
@@ -70,19 +62,21 @@ class App extends Component {
           <AppBar
             style={{position: 'absolute'}}
             title="NZ Wireless Map"
-            onLeftIconButtonTouchTap={this.toggleDrawer}
+            onLeftIconButtonTouchTap={this.toggleAbout}
             iconElementRight={
-              <TextField placeholder="Search Licensee" value={this.state.q} onChange={this.textFieldChange}/>}>
+              <TextField
+                name="search"
+                placeholder="Search Licensee"
+                value={this.state.q}
+                onChange={this.textFieldChange} />}>
           </AppBar>
           <SimpleExampleGoogleMap
            containerElement={<div style={{ height: `100%` }} />}
             mapElement={ <div style={{ height: `100%` }} /> }
-            q={this.query()}
-            />
-          <Drawer open={this.state.open} onRequestChange={this.drawerChanged} docked={false}>
-            <RaisedButton label="Chorus" onTouchTap={this.chorus}/>
-            <RaisedButton label="TVNZ" onTouchTap={this.tvnz}/>
-          </Drawer>
+            q={this.query()}/>
+          <Dialog open={this.state.aboutOpen} onRequestClose={this.dialogClosed} docked={false}>
+            <About/>
+          </Dialog>
         </div>
       </MuiThemeProvider>
     );
