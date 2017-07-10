@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-export default class DrawerContent extends Component {
+export default class DrawerContent extends React.Component {
   render() {
     return (<div>
       <h2>About</h2>
