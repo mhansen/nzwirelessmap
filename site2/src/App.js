@@ -1,14 +1,16 @@
 /* global google */
-import React, { Component } from 'react';
+import React from 'react';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import AppBar from 'material-ui/AppBar'
-import TextField from 'material-ui/TextField'
-import About from './About'
 import Dialog from 'material-ui/Dialog'
+import AutoComplete from 'material-ui/AutoComplete'
+import MenuItem from 'material-ui/MenuItem'
 
 import {withGoogleMap, GoogleMap, FusionTablesLayer} from 'react-google-maps';
+import 'whatwg-fetch'
 
+import About from './About'
 import './App.css';
 
 const SimpleExampleGoogleMap = withGoogleMap(props => (
@@ -28,13 +30,38 @@ const SimpleExampleGoogleMap = withGoogleMap(props => (
   </GoogleMap>
 ));
 
-class App extends Component {
+class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       aboutOpen: false,
-      q: ''
+      q: '',
+      dataSource: []
     };
+  }
+
+  componentDidMount() {
+    const sql =
+      'SELECT COUNT(), clientname ' +
+      'FROM 1fAeKubYzWae7KT2qYFzku1M6N3c1Gncs1XDgPOc ' +
+      'GROUP BY clientname ' +
+      'ORDER BY COUNT() DESC';
+    const key = 'AIzaSyBMxhigfinK9Rm5U8KspXKgZXifY1zVaUM';
+    fetch(`https://www.googleapis.com/fusiontables/v2/query?sql=${sql}&key=${key}`).then((response) => {
+      return response.json();
+    }).then((json) => {
+      this.setState({
+        dataSource: json.rows.map((r) => {
+          const t = r[1].toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
+          return {
+            text: t,
+            value: <MenuItem primaryText={`${t} (${r[0]})`} />
+          }
+        })
+      })
+    }).catch((ex) => {
+      console.error('fetching failed', ex);
+    });
   }
 
   query = () => {
@@ -47,7 +74,7 @@ class App extends Component {
     });
   }
 
-  textFieldChange = (e, newValue) => {
+  textFieldChange = (newValue) => {
     this.setState({q: newValue});
   }
 
@@ -64,17 +91,21 @@ class App extends Component {
             title="NZ Wireless Map"
             onLeftIconButtonTouchTap={this.toggleAbout}
             iconElementRight={
-              <TextField
+              <AutoComplete
                 name="search"
-                placeholder="Search Licensee"
-                value={this.state.q}
-                onChange={this.textFieldChange} />}>
+                dataSource={this.state.dataSource}
+                hintText="Search Licensee"
+                searchText={this.state.q}
+                openOnFocus={true}
+                filter={AutoComplete.caseInsensitiveFilter}
+                maxSearchResults={10}
+                onUpdateInput={this.textFieldChange} />}>
           </AppBar>
           <SimpleExampleGoogleMap
            containerElement={<div style={{ height: `100%` }} />}
             mapElement={ <div style={{ height: `100%` }} /> }
             q={this.query()}/>
-          <Dialog open={this.state.aboutOpen} onRequestClose={this.dialogClosed} docked={false}>
+          <Dialog open={this.state.aboutOpen} onRequestClose={this.dialogClosed}>
             <About/>
           </Dialog>
         </div>
