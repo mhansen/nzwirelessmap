@@ -6,6 +6,8 @@ import AppBar from 'material-ui/AppBar'
 import Dialog from 'material-ui/Dialog'
 import AutoComplete from 'material-ui/AutoComplete'
 import MenuItem from 'material-ui/MenuItem'
+import IconButton from 'material-ui/IconButton'
+import FontIcon from 'material-ui/FontIcon'
 
 import {withGoogleMap, GoogleMap, FusionTablesLayer} from 'react-google-maps';
 import 'whatwg-fetch'
@@ -36,7 +38,8 @@ export default class App extends React.Component {
     this.state = {
       aboutOpen: false,
       q: '',
-      dataSource: []
+      dataSource: [],
+      searchOpen: false
     };
   }
 
@@ -82,6 +85,12 @@ export default class App extends React.Component {
     this.setState({aboutOpen: false});
   }
 
+  toggleSearch = () => {
+    this.setState({
+      searchOpen: !this.state.searchOpen
+    });
+  }
+
   render() {
     return (
       <MuiThemeProvider>
@@ -90,16 +99,29 @@ export default class App extends React.Component {
             style={{position: 'absolute'}}
             title="NZ Wireless Map"
             onLeftIconButtonTouchTap={this.toggleAbout}
+            onTitleTouchTap={this.toggleSearch}
             iconElementRight={
-              <AutoComplete
-                name="search"
-                dataSource={this.state.dataSource}
-                hintText="Search Licensee"
-                searchText={this.state.q}
-                openOnFocus={true}
-                filter={AutoComplete.caseInsensitiveFilter}
-                maxSearchResults={10}
-                onUpdateInput={this.textFieldChange} />}>
+              <div>
+              { 
+                this.state.searchOpen
+                ?
+                  <AutoComplete
+                    name="search"
+                    dataSource={this.state.dataSource}
+                    hintText="Search Licensee"
+                    searchText={this.state.q}
+                    openOnFocus={true}
+                    filter={AutoComplete.caseInsensitiveFilter}
+                    maxSearchResults={10}
+                    onUpdateInput={this.textFieldChange}
+                  />
+                :
+                <IconButton tooltip="Search" onTouchTap={this.toggleSearch}>
+                  <FontIcon className="material-icons">search</FontIcon>
+                </IconButton> 
+              }
+              </div>
+              }>
           </AppBar>
           <SimpleExampleGoogleMap
            containerElement={<div style={{ height: `100%` }} />}
