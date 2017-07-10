@@ -21,6 +21,7 @@ export default class DrawerContent extends React.Component {
       <p>If you have any feedback, criticism, or suggestions, I'd love to
       hear from you! <a href="mailto:mark@markhansen.co.nz">Email me</a></p>
       <p>If you'd like to do more powerful filtering, try <a href="https://fusiontables.google.com/DataSource?docid=1fAeKubYzWae7KT2qYFzku1M6N3c1Gncs1XDgPOc#rows:id=1">Google Fusion Tables on the raw data</a> behind this site.</p>
+      <p>You may also enjoy <a href="https://broadbandmap.nz/">National Broadband Map</a>.</p>
     </div>)
   }
 }
