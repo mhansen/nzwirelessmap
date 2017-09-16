@@ -14,6 +14,8 @@ export default class DrawerContent extends React.Component {
       <p>
         This site was made by <a href="//markhansen.co.nz/">Mark Hansen</a>.
         The code's on <a href="https://github.com/mhansen/nzwirelessmap">GitHub</a>.
+      </p>
+      <p>
         <a href="http://markhansen.co.nz/nz-wireless-map">How this was made</a>.
       </p>
       <p>If you have any feedback, <a href="mailto:mark@markhansen.co.nz">email Mark</a>.</p>
