@@ -20,14 +20,10 @@ file "point_to_point_links.csv" => ["prism.sqlite3", "select_point_to_point_link
   sh "cat select_point_to_point_links.sql | sqlite3 prism.sqlite3 > #{t.name}"
 end
 
-file "site/static/top_clients.js" => ["prism.sqlite3"] do |t|
-  sh "cat select_top_clients.sql | sqlite3 prism.sqlite3 > #{t.name}"
-end
-
 task "update_fusion_tables", [:refresh_token] => ["point_to_point_links.csv", "fusiontables.py"] do |t, args|
   sh "cat #{t.prerequisites[0]} | python #{t.prerequisites[1]} --refresh_token=#{args.refresh_token}"
 end
 
 task "deploy_to_app_engine" => ["site/static/index.js"] do
-  sh "~/Downloads/google_appengine/appcfg.py update site/ --oauth2"
+  sh "~/Downloads/google_appengine/appcfg.py update site2/ --oauth2"
 end
