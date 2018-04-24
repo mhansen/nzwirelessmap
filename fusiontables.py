@@ -1,4 +1,4 @@
-import gflags
+from absl import flags as gflags
 import json
 import requests
 import sys
