@@ -49,7 +49,7 @@ export default class App extends React.Component {
       'FROM 1fAeKubYzWae7KT2qYFzku1M6N3c1Gncs1XDgPOc ' +
       'GROUP BY clientname ' +
       'ORDER BY COUNT() DESC';
-    const key = 'AIzaSyBMxhigfinK9Rm5U8KspXKgZXifY1zVaUM';
+    const key = 'AIzaSyDu31WiWf35oW8k0TqfpJGP6C6OopyuxJU';
     fetch(`https://www.googleapis.com/fusiontables/v2/query?sql=${sql}&key=${key}`).then((response) => {
       return response.json();
     }).then((json) => {
@@ -98,7 +98,7 @@ export default class App extends React.Component {
           <AppBar
             style={{position: 'absolute'}}
             title="NZ Wireless Map"
-            onLeftIconButtonTouchTap={this.toggleAbout}
+            onLeftIconButtonClick={this.toggleAbout}
             iconElementRight={
               <div>
               { 
@@ -115,7 +115,7 @@ export default class App extends React.Component {
                     onUpdateInput={this.textFieldChange}
                   />
                 :
-                <IconButton tooltip="Search" onTouchTap={this.toggleSearch}>
+                <IconButton tooltip="Search" onClick={this.toggleSearch}>
                   <FontIcon className="material-icons">search</FontIcon>
                 </IconButton> 
               }
