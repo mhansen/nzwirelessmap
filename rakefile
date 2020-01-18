@@ -20,6 +20,10 @@ file "point_to_point_links.csv" => ["prism.sqlite3", "select_point_to_point_link
   sh "cat select_point_to_point_links.sql | sqlite3 prism.sqlite3 > #{t.name}"
 end
 
+file "point_to_point_links.json" => ["point_to_point_links.csv", "csv2json.py"] do |t|
+  sh "cat point_to_point_links.csv | python3 csv2json.py > #{t.name}"
+end
+
 task "deploy_to_app_engine" => ["site/static/index.js"] do
   sh "~/Downloads/google_appengine/appcfg.py update site2/ --oauth2"
 end

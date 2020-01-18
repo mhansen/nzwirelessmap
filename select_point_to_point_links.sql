@@ -8,7 +8,7 @@ rxgeoref.northing as rx_lat,
 rxlocation.locationheight as rx_height,
 txgeoref.easting as tx_lng,
 txgeoref.northing as tx_lat,
-txlocation.locationheight as tx_height
+txlocation.locationheight as tx_height,
 
 ---- Licence Attributes
 licence.licenceid as licenceid,
