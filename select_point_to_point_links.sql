@@ -3,10 +3,12 @@
 .headers ON
 .mode csv
 select 
-"<LineString><coordinates>"||
-rxgeoref.easting||","||rxgeoref.northing||","||rxlocation.locationheight||" "||
-txgeoref.easting||","||txgeoref.northing||","||txlocation.locationheight||
-"</coordinates></LineString>" as kml,
+rxgeoref.easting as rx_lng,
+rxgeoref.northing as rx_lat,
+rxlocation.locationheight as rx_height,
+txgeoref.easting as tx_lng,
+txgeoref.northing as tx_lat,
+txlocation.locationheight as tx_height
 
 ---- Licence Attributes
 licence.licenceid as licenceid,
