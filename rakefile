@@ -1,5 +1,5 @@
 file "prism.zip" do |t|
-  sh "wget http://www.rsm.govt.nz/online-services-resources/pdf-and-documents-library/tools/spectrum-search-lite/prism.zip"
+  sh "wget https://www.rsm.govt.nz/assets/Uploads/documents/prism/prism.zip"
 end
 
 file "prism.mdb" => ["prism.zip"] do |t|
