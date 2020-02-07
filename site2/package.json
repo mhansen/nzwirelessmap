@@ -3,13 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@danmarshall/deckgl-typings": "^3.4.3",
+    "@types/googlemaps": "^3.39.2",
+    "@types/material-ui": "^0.21.7",
+    "@types/mocha": "^7.0.1",
+    "@types/react": "^16.9.19",
+    "deck.gl": "^8.0.13",
     "material-ui": "^0.20.2",
-    "npm": "^6.9.0",
-    "react": "^15.6.2",
-    "react-dom": "^15.6.2",
+    "npm": "^6.13.7",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
     "react-google-maps": "^9.4.5",
-    "react-scripts": "^2.1.8",
-    "whatwg-fetch": "^2.0.4"
+    "react-scripts": "^3.3.1",
+    "typescript": "^3.7.5",
+    "whatwg-fetch": "^3.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
