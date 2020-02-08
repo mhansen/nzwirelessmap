@@ -29,7 +29,7 @@ function loadScript(url: string) {
   });
 }
 
-function createLineLayer(data) {
+function createLineLayer(data : object[]) {
   return new LineLayer({
     id: 'point2point',
     data: data,
@@ -58,13 +58,13 @@ loadScript(GOOGLE_MAPS_API_URL).then(() => {
   overlay.setMap(map);
 });
 
-const count = (clientnames) => {
+const count = (clientnames: string[]) => {
   var out = new Map<string, number>();
   for (let clientname of clientnames) {
     if (!out.has(clientname)) {
       out.set(clientname, 0);
     }
-    out.set(clientname, out.get(clientname) + 1);
+    out.set(clientname, out.get(clientname)! + 1);
   }
   return out;
 }
@@ -72,7 +72,7 @@ const count = (clientnames) => {
 const indexedClientNames = count(p2plinks.map(link => link.clientname));
 console.log(indexedClientNames);
 
-const capitalize = (s) => s.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
+const capitalize = (s : string) => s.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
 
 interface IProps {
 
@@ -86,7 +86,7 @@ interface IState {
 }
 
 export default class App extends React.Component<IProps, IState> {
-  constructor(props) {
+  constructor(props : IProps) {
     super(props);
 
     const dataSource = [];
@@ -119,7 +119,7 @@ export default class App extends React.Component<IProps, IState> {
     });
   }
 
-  textFieldChange = (newValue) => {
+  textFieldChange = (newValue: string) => {
     this.setState({q: newValue});
     // HACK, just return early if there's no maps, oh well.
     // A shame about the race conditions loading maps. Maybe I should load Maps synchronously?
@@ -133,7 +133,7 @@ export default class App extends React.Component<IProps, IState> {
       return;
     }
     overlay.setProps({
-      layers: [createLineLayer(p2plinks.filter(link => link.clientname.toLowerCase() == newValue.toLowerCase()))],
+      layers: [createLineLayer(p2plinks.filter(link => link.clientname.toLowerCase() === newValue.toLowerCase()))],
     });
   }
 
