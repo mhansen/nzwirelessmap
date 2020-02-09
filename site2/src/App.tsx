@@ -35,10 +35,10 @@ function createLineLayer(data : object[]) {
     data: data,
     getSourcePosition: d => [d.rx_lng, d.rx_lat],
     getTargetPosition: d => [d.tx_lng, d.tx_lat],
-    getWidth: 1.5,
+    getWidth: 2,
     getColor: [120, 249, 0],
     pickable: true,
-    onClick: info => console.log(info.object.clientname),
+    onClick: info => app.onRadioLinkClick(info.object),
     autoHighlight: true,
   });
 }
@@ -83,6 +83,7 @@ interface IState {
   q: string;
   dataSource: any[];
   searchOpen: boolean;
+  link: object|null;
 }
 
 export default class App extends React.Component<IProps, IState> {
@@ -109,8 +110,15 @@ export default class App extends React.Component<IProps, IState> {
       aboutOpen: false,
       q: '',
       dataSource: dataSource,
-      searchOpen: false
+      searchOpen: false,
+      link: null,
     };
+  }
+
+  onRadioLinkClick = (link : object) => {
+    this.setState({
+      link: link
+    });
   }
 
   toggleAbout = () => {
@@ -181,6 +189,27 @@ export default class App extends React.Component<IProps, IState> {
           <div id="map"></div>
           <Dialog open={this.state.aboutOpen} onRequestClose={this.dialogClosed}>
             <About/>
+          </Dialog>
+          <Dialog open={this.state.link != null} onRequestClose={() => {this.setState({link: null});}}>
+            <dl>
+              <dt>License ID:</dt>
+              <dd>{this.state.link?.licenceid}</dd>
+              <dt>Client name:</dt>
+              <dd>{this.state.link?.clientname}</dd>
+              <dt>License type:</dt>
+              <dd>{this.state.link?.licencetype}</dd>
+              <dt>Frequency:</dt>
+              <dd>{this.state.link?.frequency} MHz</dd>
+              <dt>Transmitter name:</dt>
+              <dd>{this.state.link?.tx_name}</dd>
+              <dt>Receiver name:</dt>
+              <dd>{this.state.link?.rx_name}</dd>
+              <dt>Power:</dt>
+              <dd>{this.state.link?.power} dBW (eirp)</dd>
+            </dl>
+            <p>
+              <a href="https://rrf.rsm.govt.nz/smart-web/smart/page/-smart/domain/licence/SelectLicencePage.wdk">Search Radio Spectrum Management for more details</a>.
+            </p>
           </Dialog>
         </div>
       </MuiThemeProvider>
