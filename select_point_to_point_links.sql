@@ -1,54 +1,50 @@
+.headers on
+.mode csv
 -- Objective: find the pairs of towers in point to point links, so we can plot
 -- them on a map.
-.headers ON
-.mode csv
 select 
-rxgeoref.easting as rx_lng,
-rxgeoref.northing as rx_lat,
-rxlocation.locationheight as rx_height,
-txgeoref.easting as tx_lng,
-txgeoref.northing as tx_lat,
-txlocation.locationheight as tx_height,
+-- rxlocation.locationheight as rx_height,
+-- txlocation.locationheight as tx_height,
 
 ---- Licence Attributes
 licence.licenceid as licenceid,
-trim(licence.clientid) as clientid,
+-- trim(licence.clientid) as clientid,
 trim(clientname.name) as clientname,
 trim(licence.licencetype) as licencetype,
-trim(licence.licencecode) as licencecode,
-trim(licence.licencecategory) as licencecategory,
+-- trim(licence.licencecode) as licencecode,
+-- trim(licence.licencecategory) as licencecategory,
 
 -- Spectrum Attributes
-trim(spectrum.spectrumstatus) as spectrumstatus,
-trim(spectrum.spectrumlabel) as spectrumlabel,
-trim(spectrum.spectrumtype) as spectrumtype,
+-- trim(spectrum.spectrumstatus) as spectrumstatus,
+-- trim(spectrum.spectrumlabel) as spectrumlabel,
+-- trim(spectrum.spectrumtype) as spectrumtype,
 spectrum.frequency as frequency,
-spectrum.spectrumlow as spectrumhigh,
-spectrum.spectrumhigh as spectrumhigh,
+-- spectrum.spectrumlow as spectrumhigh,
+-- spectrum.spectrumhigh as spectrumhigh,
 spectrum.power as power,
-trim(spectrum.polarisation) as polarisation,
+-- trim(spectrum.polarisation) as polarisation,
 
 -- Transmit Attributes
 trim(txlocation.locationname) as tx_name,
 txgeoref.easting as tx_lng,
 txgeoref.northing as tx_lat,
-txlocation.locationheight as tx_alt,
-trim(transmitconfiguration.txantennamake) as txantennamake,
-trim(transmitconfiguration.txantennatype) as txantennatype,
-transmitconfiguration.txantennaheight as txantennaheight,
-transmitconfiguration.txazimuth as txazimuth,
-trim(transmitconfiguration.txequipment) as txequipment,
+-- txlocation.locationheight as tx_alt,
+-- trim(transmitconfiguration.txantennamake) as txantennamake,
+-- trim(transmitconfiguration.txantennatype) as txantennatype,
+-- transmitconfiguration.txantennaheight as txantennaheight,
+-- transmitconfiguration.txazimuth as txazimuth,
+-- trim(transmitconfiguration.txequipment) as txequipment,
 
 -- Receive Attributes
 trim(rxlocation.locationname) as rx_name,
 rxgeoref.easting as rx_lng,
-rxgeoref.northing as rx_lat,
-rxlocation.locationheight as rx_alt,
-trim(receiveconfiguration.rxantennamake) as rxantennamake,
-trim(receiveconfiguration.rxantennatype) as rxantennatype,
-receiveconfiguration.rxantennaheight as rxantennaheight,
-receiveconfiguration.rxazimuth as rxazimuth,
-trim(receiveconfiguration.rxequipment) as rxequipment
+rxgeoref.northing as rx_lat
+-- rxlocation.locationheight as rx_alt,
+-- trim(receiveconfiguration.rxantennamake) as rxantennamake,
+-- trim(receiveconfiguration.rxantennatype) as rxantennatype,
+-- receiveconfiguration.rxantennaheight as rxantennaheight,
+-- receiveconfiguration.rxazimuth as rxazimuth,
+-- trim(receiveconfiguration.rxequipment) as rxequipment
 
 from receiveconfiguration 
 
