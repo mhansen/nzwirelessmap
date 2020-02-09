@@ -35,7 +35,10 @@ function createLineLayer(data : object[]) {
     data: data,
     getSourcePosition: d => [d.rx_lng, d.rx_lat],
     getTargetPosition: d => [d.tx_lng, d.tx_lat],
-    getWidth: 2,
+    getWidth: 100, // balance between being able to see auckland and not
+    widthUnits: 'meters',
+    widthMinPixels: 1.5, // i get aliasing with 1, but 2 seems too big.
+    widthMaxPixels: 100, // big enough to click
     getColor: [120, 249, 0],
     pickable: true,
     onClick: info => app.onRadioLinkClick(info.object),
