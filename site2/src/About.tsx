@@ -1,8 +1,16 @@
 import React from 'react';
+import { ImageExposurePlus1 } from 'material-ui/svg-icons';
 
-export default class DrawerContent extends React.Component {
+interface IProps {
+  lastModifiedTime: Date|null;
+}
+
+interface IState {}
+
+export default class DrawerContent extends React.Component<IProps, IState> {
   render() {
     return (<div>
+      <p>Data last updated {this.props.lastModifiedTime?.toLocaleString("en-NZ", {timeZone: "Pacific/Auckland"})} (NZ Time)</p>
       <p>Each line is a point-to-point wireless radio link registered with 
       the NZ Government <a href="https://www.rsm.govt.nz/">Radio Spectrum Management</a> team.
       </p>

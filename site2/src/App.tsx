@@ -17,6 +17,21 @@ import './App.css';
 const GOOGLE_MAPS_API_KEY = 'AIzaSyBNy69MtC5GTrt3DiRUUOZLUAFhpWx-FIQ';
 const GOOGLE_MAPS_API_URL = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=visualization`;
 
+// One row of JSON. Represents a point-to-point link.
+interface Link {
+  licenceid: string;
+  clientname: string;
+  licencetype: string;
+  frequency: string;
+  power: string;
+  tx_name: string;
+  tx_lng: string;
+  tx_lat: string;
+  rx_name: string;
+  rx_lng: string;
+  rx_lat: string;
+}
+
 function loadScript(url: string) {
   const script = document.createElement('script');
   script.type = 'text/javascript';
@@ -48,9 +63,10 @@ interface IState {
   q: string;
   dataSource: any[];
   searchOpen: boolean;
-  link: object|null;
-  p2plinks: object[];
+  link: Link|null;
+  p2plinks: Link[];
   overlay: GoogleMapsOverlay|null;
+  lastModifiedTime: Date|null;
 }
 
 export default class App extends React.Component<IProps, IState> {
@@ -65,6 +81,7 @@ export default class App extends React.Component<IProps, IState> {
       link: null,
       p2plinks: [],
       overlay: null,
+      lastModifiedTime: null,
     };
   }
 
@@ -85,8 +102,10 @@ export default class App extends React.Component<IProps, IState> {
       });
     });
     const p2 = fetch("https://nz-wireless-map.storage.googleapis.com/prism.json/latest", {
-    })
-          .then(res => res.json());
+    }).then(res => {
+      this.setLastModifiedTime(new Date(res.headers.get('Last-Modified')!));
+      return res.json()
+    });
 
     Promise.all([p1, p2]).then(values => {
       const [_, p2plinks] = values;
@@ -98,8 +117,8 @@ export default class App extends React.Component<IProps, IState> {
     return new LineLayer({
       id: 'point2point',
       data: p2plinks,
-      getSourcePosition: d => [parseFloat(d.rx_lng), parseFloat(d.rx_lat)],
-      getTargetPosition: d => [parseFloat(d.tx_lng), parseFloat(d.tx_lat)],
+      getSourcePosition: (d: Link) => [parseFloat(d.rx_lng), parseFloat(d.rx_lat)],
+      getTargetPosition: (d: Link) => [parseFloat(d.tx_lng), parseFloat(d.tx_lat)],
       getWidth: 100, // balance between being able to see auckland and not
       widthUnits: 'meters',
       widthMinPixels: 1.5, // i get aliasing with 1, but 2 seems too big.
@@ -111,8 +130,15 @@ export default class App extends React.Component<IProps, IState> {
     });
   }
 
-  setLinks(p2plinks: object[]) {
-    const indexedClientNames = count(p2plinks.map(link => link.clientname));
+
+  setLastModifiedTime(date: Date) {
+    this.setState({
+      lastModifiedTime: date
+    });
+  }
+
+  setLinks(p2plinks: Link[]) {
+    const indexedClientNames = count(p2plinks.map((link: Link) => link.clientname));
     const dataSource = [];
     for (let [clientname, count] of indexedClientNames.entries()) {
       const capitalized = capitalize(clientname);
@@ -136,7 +162,7 @@ export default class App extends React.Component<IProps, IState> {
     this.updateLayers();
   }
 
-  onRadioLinkClick(link : object) {
+  onRadioLinkClick(link : Link) {
     this.setState({
       link: link
     });
@@ -211,7 +237,7 @@ export default class App extends React.Component<IProps, IState> {
           </AppBar>
           <div id="map"></div>
           <Dialog open={this.state.aboutOpen} onRequestClose={() => this.dialogClosed()}>
-            <About/>
+            <About lastModifiedTime={this.state.lastModifiedTime}/>
           </Dialog>
           <Dialog open={this.state.link != null} onRequestClose={() => {this.setState({link: null});}}>
             <dl>
