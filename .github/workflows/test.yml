@@ -10,6 +10,6 @@ jobs:
         with:
           node-version: '12'
       - run: npm install
-        working_directory: site2
+        working-directory: site2
       - run: npm run-script build
-        working_directory: site2
+        working-directory: site2
