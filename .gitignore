@@ -6,3 +6,4 @@ point_to_point_links.json
 *.pyc
 *.swp
 site/static/*.js
+.firebase/
