@@ -5,17 +5,8 @@ http://www.rsm.govt.nz/ in MS Access format.
 
 ## Instructions
 
-To download the MDB database from RSM, convert the MDB database
-into a cross-platform SQLite database, and make a CSV file for
-import into Fusion Tables, run
-
-    $ rake point_to_point_links.csv
-
-Then upload to fusion tables with
-
-    $ rake update_fusion_tables[{refresh_token}]
-
-where {refresh\_token} is a pre-generated token that grants access to your Fusion Tables.
+https://github.com/mhansen/nzwirelessmap-fetch contains code to fetch the
+Radio Spectrum Management database and convert it to JSON format.
 
 You can browse the map generated at http://wirelessmap.markhansen.co.nz/.
 
