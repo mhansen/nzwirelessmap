@@ -113,7 +113,7 @@ export default class App extends React.Component<IProps, IState> {
     });
   }
 
-  createLineLayer(p2plinks : object[]) {
+  createLineLayer(p2plinks : Iterable<Link>) {
     return new LineLayer({
       id: 'point2point',
       data: p2plinks,
@@ -125,7 +125,7 @@ export default class App extends React.Component<IProps, IState> {
       widthMaxPixels: 100, // big enough to click
       getColor: [120, 249, 0],
       pickable: true,
-      onClick: info => this.onRadioLinkClick(info.object),
+      onClick: info => this.onRadioLinkClick(info.object as Link),
       autoHighlight: true,
     });
   }

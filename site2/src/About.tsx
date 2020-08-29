@@ -1,5 +1,4 @@
 import React from 'react';
-import { ImageExposurePlus1 } from 'material-ui/svg-icons';
 
 interface IProps {
   lastModifiedTime: Date|null;
