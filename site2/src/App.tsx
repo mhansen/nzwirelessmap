@@ -242,7 +242,11 @@ export default class App extends React.Component<IProps, IState> {
           <Dialog open={this.state.link != null} onRequestClose={() => {this.setState({link: null});}}>
             <dl>
               <dt>License ID:</dt>
-              <dd>{this.state.link?.licenceid}</dd>
+              <dd>
+                <a href={'https://rrf.rsm.govt.nz/rrf/licence/id/' + this.state.link?.licenceid}>
+                  {this.state.link?.licenceid}
+                </a>
+              </dd>
               <dt>Client name:</dt>
               <dd>{this.state.link?.clientname}</dd>
               <dt>License type:</dt>
