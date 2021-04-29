@@ -260,9 +260,6 @@ export default class App extends React.Component<IProps, IState> {
               <dt>Power:</dt>
               <dd>{this.state.link?.power} dBW (eirp)</dd>
             </dl>
-            <p>
-              <a href="https://rrf.rsm.govt.nz/smart-web/smart/page/-smart/domain/licence/SelectLicencePage.wdk">Search Radio Spectrum Management for more details</a>.
-            </p>
           </Dialog>
         </div>
       </MuiThemeProvider>
