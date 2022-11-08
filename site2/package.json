@@ -9,7 +9,7 @@
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-google-maps": "^9.4.5",
-    "react-scripts": "^3.3.1",
+    "react-scripts": "^5.0.1",
     "typescript": "^3.7.5",
     "whatwg-fetch": "^3.0.0"
   },
