@@ -5,7 +5,7 @@
   "dependencies": {
     "deck.gl": "^8.0.13",
     "material-ui": "^0.20.2",
-    "npm": "^6.13.7",
+    "npm": "^6.14.17",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-google-maps": "^9.4.5",
