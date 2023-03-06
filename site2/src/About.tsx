@@ -9,7 +9,10 @@ interface IState {}
 export default class DrawerContent extends React.Component<IProps, IState> {
   render() {
     return (<div>
-      <p>Data last updated {this.props.lastModifiedTime?.toLocaleString("en-NZ", {timeZone: "Pacific/Auckland"})} (NZ Time)</p>
+      <p>Data last updated {this.props.lastModifiedTime?.toLocaleString("en-NZ",
+      {timeZone: "Pacific/Auckland"})} (NZ Time) from the <a
+      href="https://www.rsm.govt.nz/engineers-and-examiners/resources-for-engineers-and-certifiers/spectrum-search-lite/">download
+      page</a>.</p>
       <p>Each line is a point-to-point wireless radio link registered with 
       the NZ Government <a href="https://www.rsm.govt.nz/">Radio Spectrum Management</a> team.
       </p>
