@@ -29,7 +29,7 @@
     "@danmarshall/deckgl-typings": "^3.5.0",
     "@types/googlemaps": "^3.39.2",
     "@types/material-ui": "^0.21.7",
-    "@types/mocha": "^7.0.1",
+    "@types/mocha": "^10.0.0",
     "@types/react": "^16.9.19",
     "@types/react-dom": "^16.9.5"
   }
