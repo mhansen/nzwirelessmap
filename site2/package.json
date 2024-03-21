@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "deck.gl": "^8.8.20",
+    "deck.gl": "^9.0.0",
     "material-ui": "^0.20.2",
     "npm": "^10.0.0",
     "react": "^16.12.0",
