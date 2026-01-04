@@ -70,6 +70,8 @@ interface IState {
 }
 
 export default class App extends React.Component<IProps, IState> {
+  map: google.maps.Map | null = null;
+
   constructor(props : IProps) {
     super(props);
 
@@ -88,15 +90,18 @@ export default class App extends React.Component<IProps, IState> {
   componentDidMount() {
     const p1 = loadScript(GOOGLE_MAPS_API_URL).then(() => {
       const mapContainer = document.getElementById('map')!;
-      const map = new google.maps.Map(mapContainer, {
+      this.map = new google.maps.Map(mapContainer, {
         center: {lat: -41, lng: 174},
         zoom: 6,
         mapTypeId: 'satellite',
       });
+      this.map.addListener('zoom_changed', () => {
+        this.updateLayers();
+      });
       const overlay = new GoogleMapsOverlay({
         layers: [new LineLayer({id: 'point2point', data: []})]
       });
-      overlay.setMap(map);
+      overlay.setMap(this.map);
       this.setState({
         overlay: overlay
       });
@@ -114,15 +119,15 @@ export default class App extends React.Component<IProps, IState> {
   }
 
   createLineLayer(p2plinks : Iterable<Link>) {
+    const zoom = this.map ? this.map.getZoom()! : 6;
+    const width = zoom < 8 ? 1 : 2;
     return new LineLayer({
       id: 'point2point',
       data: p2plinks,
       getSourcePosition: (d: Link) => [parseFloat(d.rx_lng), parseFloat(d.rx_lat)],
       getTargetPosition: (d: Link) => [parseFloat(d.tx_lng), parseFloat(d.tx_lat)],
-      getWidth: 100, // balance between being able to see auckland and not
-      widthUnits: 'meters',
-      widthMinPixels: 1.5, // i get aliasing with 1, but 2 seems too big.
-      widthMaxPixels: 100, // big enough to click
+      getWidth: width,
+      widthMinPixels: 1,
       getColor: [120, 249, 0],
       pickable: true,
       onClick: info => this.onRadioLinkClick(info.object as Link),
