@@ -241,10 +241,10 @@ export default class App extends React.Component<IProps, IState> {
               }>
           </AppBar>
           <div id="map"></div>
-          <Dialog open={this.state.aboutOpen} onRequestClose={() => this.dialogClosed()}>
+          <Dialog open={this.state.aboutOpen} onRequestClose={() => this.dialogClosed()} autoScrollBodyContent={true} repositionOnUpdate={false} autoDetectWindowHeight={false}>
             <About lastModifiedTime={this.state.lastModifiedTime}/>
           </Dialog>
-          <Dialog open={this.state.link != null} onRequestClose={() => {this.setState({link: null});}}>
+          <Dialog open={this.state.link != null} onRequestClose={() => {this.setState({link: null});}} autoScrollBodyContent={true} repositionOnUpdate={false} autoDetectWindowHeight={false}>
             <dl>
               <dt>License ID:</dt>
               <dd>
