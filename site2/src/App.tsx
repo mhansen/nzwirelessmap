@@ -157,7 +157,7 @@ export default class App extends React.Component<IProps, IState> {
 
     this.setState({
       dataSource: dataSource,
-      p2plinks: p2plinks,
+      p2plinks: p2plinks.map(l => ({...l, tx_name: capitalize(l.tx_name), rx_name: capitalize(l.rx_name)})),
     });
     this.updateLayers();
   }
