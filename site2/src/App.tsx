@@ -175,8 +175,7 @@ export default class App extends React.Component<IProps, IState> {
   }
 
   textFieldChange(newValue: string) {
-    this.setState({q: newValue});
-    this.updateLayers();
+    this.setState({q: newValue}, () => this.updateLayers());
   }
 
   updateLayers() {
@@ -226,6 +225,7 @@ export default class App extends React.Component<IProps, IState> {
                     filter={AutoComplete.caseInsensitiveFilter}
                     maxSearchResults={10}
                     onUpdateInput={(newValue) => this.textFieldChange(newValue)}
+                    onNewRequest={(chosenRequest) => this.textFieldChange(chosenRequest.clientname)}
                   />
                 :
                 <IconButton tooltip="Search" onClick={() => this.toggleSearch()}>
